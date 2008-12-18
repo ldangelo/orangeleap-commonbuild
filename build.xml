@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ================================= 
+	Build ALL projects in your source tree
+    ================================= -->
+
+<project name="commonBuild" xmlns:ivy="antlib:org.apache.ivy.ant" basedir=".">
+	<property file="${basedir}/commonBuild.properties" />
+	<import file="${commonBuild.dir}/ivyBuild.xml"/>
+	
+	<target name="buildlist" depends="load-ivy">
+		<ivy:buildlist reference="build-path">
+			<fileset dir=".." includes="**/build/build.xml" excludes="${ant.project.name}/build.xml"/>
+		</ivy:buildlist>
+	</target>
+
+	<target name="publish-all" depends="buildlist" description="compile, jar and publish all projects in the right order">
+		<subant target="publish" buildpathref="build-path" />
+	</target>
+
+	<!-- TODO: complete the below targets -->
+	<target name="clean-all" depends="buildlist" description="clean all projects">
+		<subant target="0. Clean" buildpathref="build-path" failonerror="false" /> <!-- TODO: remove failonerror -->
+	</target>
+
+	<target name="clean" depends="clean-all, load-ivy" description="clean tutorial: delete repository, ivy cache, and all projects">
+		<delete dir="repository" />
+		<ivy:cleancache />
+	</target>
+	
+</project>
