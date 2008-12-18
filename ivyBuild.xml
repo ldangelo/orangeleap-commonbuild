@@ -34,12 +34,6 @@
         <fileset dir="${lib.dir}" />
     </path>
     	
-    <path id="run.path.id">
-        <path refid="lib.path.id" />
-        <path location="${classes.dir}" />
-    </path>
-    
-	
     <!-- ================================= 
           target: resolve              
          ================================= -->
@@ -49,6 +43,10 @@
     	<!-- the call to resolve is not mandatory, retrieve makes an implicit call if we don't -->
     	<ivy:resolve file="${ivy.file}"/>
     	<ivy:retrieve pattern="${lib.dir}/[type]/[artifact].[ext]" />
+
+    	<ivy:cachepath pathid="compile.path" conf="compile" />
+        <ivy:cachepath pathid="war.path" conf="war" />
+        <ivy:cachepath pathid="test.path" conf="test" />
     </target>
     
     <!-- ================================= 
@@ -72,6 +70,12 @@
           target: run
          ================================= -->
     <!--
+     <path id="run.path.id">
+        <path refid="lib.path.id" />
+        <path location="${classes.dir}" />
+    </path>
+    
+	
     <target name="run" depends="version, compile" description="-> compile and run the project">
         <java classpathref="run.path.id" classname="${main.class.name}"/>
     </target>
