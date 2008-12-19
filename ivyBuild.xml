@@ -37,10 +37,7 @@
     <!-- ================================= 
           target: resolve              
          ================================= -->
-    <target name="resolve" depends="clean-lib, load-ivy" description="-> resolve and retrieve dependencies with ivy">
-        <mkdir dir="${lib.dir}"/> <!-- not usually necessary, ivy creates the directory IF there are dependencies -->
-    	
-    	<!-- the call to resolve is not mandatory, retrieve makes an implicit call if we don't -->
+    <target name="resolve" depends="load-ivy" description="-> resolve and retrieve dependencies with ivy">
     	<ivy:resolve file="${ivy.file}"/>
     	<ivy:retrieve pattern="${lib.dir}/[type]/[artifact].[ext]" />
 
@@ -130,15 +127,15 @@
     -->
 
     <!-- ================================= 
-          target: classes-jar STUB          
+          target: install STUB          
          ================================= -->
-    <target name="classes-jar" description="-> make a jar file for this project">
+    <target name="install" description="-> make a jar/war/ear/etc file for this project">
     </target>
 
     <!-- ================================= 
           target: publish              
          ================================= -->
-    <target name="publish" depends="clean-build, classes-jar, version" description="-> publish this project in the ivy repository">
+    <target name="publish" depends="clean-build, install, version" description="-> publish this project in the ivy repository">
     	<ivy:publish artifactspattern="${stage.dir}/[artifact].[ext]" 
     			           resolver="shared"
     			           pubrevision="${version}" 
@@ -150,7 +147,7 @@
     <!-- ================================= 
           target: publish-local              
          ================================= -->
-    <target name="publish-local" depends="classes-jar, local-version" description="-> publish this project in the local ivy repository">
+    <target name="publish-local" depends="install, local-version" description="-> publish this project in the local ivy repository">
     	<ivy:publish artifactspattern="${stage.dir}/[artifact].[ext]" 
     			        resolver="local"
     			        pubrevision="${version}"
