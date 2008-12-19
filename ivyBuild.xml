@@ -27,7 +27,7 @@
 			<fileset dir="${ivy.jar.dir}" includes="*.jar" />
 		</path>
 		<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path" />
-		<!--<ivy:settings file="${commonBuild.dir}/ivysettings.xml" />-->
+		<ivy:settings file="${commonBuild.dir}/ivysettings.xml" />
 	</target>
 
     <path id="lib.path.id">
