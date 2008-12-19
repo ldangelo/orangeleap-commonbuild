@@ -4,7 +4,7 @@
 	Build ALL projects in your source tree
     ================================= -->
 
-<project name="commonBuild" xmlns:ivy="antlib:org.apache.ivy.ant" basedir=".">
+<project name="commonBuild" xmlns:ivy="antlib:org.apache.ivy.ant" basedir="." default="install">
 	<property file="${basedir}/commonBuild.properties" />
 	<import file="${commonBuild.dir}/ivyBuild.xml"/>
 	
@@ -14,10 +14,18 @@
 		</ivy:buildlist>
 	</target>
 
-	<target name="publish-all" depends="buildlist" description="compile, jar and publish all projects in the right order">
+	<target name="install" depends="buildlist" description="Invokes the install target on each build file in the project tree">
+		<subant target="install" buildpathref="build-path" />
+	</target>
+	
+	<target name="publish" depends="buildlist" description="compile, jar and publish all projects in the right order to the SHARED repository">
 		<subant target="publish" buildpathref="build-path" />
 	</target>
-
+	
+	<target name="publish-local" depends="buildlist" description="compile, jar and publish all projects in the right order to the LOCAL repository">
+		<subant target="publish-local" buildpathref="build-path" />
+	</target>
+	
 	<!-- TODO: complete the below targets -->
 	<target name="clean-all" depends="buildlist" description="clean all projects">
 		<subant target="0. Clean" buildpathref="build-path" failonerror="false" /> <!-- TODO: remove failonerror -->
