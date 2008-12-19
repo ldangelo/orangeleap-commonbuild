@@ -45,8 +45,13 @@
     	<ivy:retrieve pattern="${lib.dir}/[type]/[artifact].[ext]" />
 
     	<ivy:cachepath pathid="compile.path" conf="compile" />
+    	<pathconvert property="compile.lib" refid="compile.path"></pathconvert> 
+    	
         <ivy:cachepath pathid="war.path" conf="war" />
+    	<pathconvert property="war.lib" refid="war.path"></pathconvert> 
+    	
         <ivy:cachepath pathid="test.path" conf="test" />
+    	<pathconvert property="test.lib" refid="test.path"></pathconvert> 
     </target>
     
     <!-- ================================= 
