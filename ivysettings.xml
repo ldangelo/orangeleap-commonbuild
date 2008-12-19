@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ivysettings>
-	<property name="ivy.local.default.root"             value="${ivy.default.ivy.user.dir}/local" override="false"/>
+	<property name="ivy.local.default.root"             value="${ivy.default.ivy.user.dir}/repository/local" override="false"/>
+	<property name="ivy.shared.default.root"             value="${ivy.default.ivy.user.dir}/repository/shared" override="false"/>
 	<property name="ivy.local.default.ivy.pattern"      value="[organisation]/[module]/[type]s/[artifact]-[revision](-[classifier]).[ext]" override="false"/>
 	<property name="ivy.local.default.artifact.pattern" value="[organisation]/[module]/[type]s/[artifact]-[revision](-[classifier]).[ext]" override="false"/>
 	<settings defaultResolver="default"/>
@@ -10,15 +11,23 @@
 			<ivy pattern="${ivy.local.default.root}/${ivy.local.default.ivy.pattern}"/>
 			<artifact pattern="${ivy.local.default.root}/${ivy.local.default.artifact.pattern}"/>
 		</filesystem>
-		<ibiblio name="central" m2compatible="true" usepoms="false" root="http://repo1.maven.org/maven2" pattern="[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
+		<filesystem name="shared"> <!--  TODO: replaced shared definition with enterprise repository -->
+			<ivy pattern="${ivy.shared.default.root}/${ivy.local.default.ivy.pattern}"/>
+			<artifact pattern="${ivy.shared.default.root}/${ivy.local.default.artifact.pattern}"/>
+		</filesystem>
+		<ibiblio name="public" m2compatible="true" usepoms="false" root="http://repo1.maven.org/maven2" pattern="[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
 		<ibiblio name="jboss" m2compatible="true" usepoms="false" root="http://repository.jboss.org/maven2" pattern="[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
-		<chain name="default" returnFirst="true">
-			<resolver ref="local"/>
+		<chain name="main" dual="true">
+			<resolver ref="shared"/>
 			<!-- central has to come before jboss because jboss is missing
 			sources for some artifacts and ivy will only get the sources from
 			the same place it got the jar file (doh!) -->
-			<resolver ref="central"/>
+			<resolver ref="public"/>
 			<resolver ref="jboss"/>
+		</chain>
+		<chain name="default" returnFirst="true" checkmodified="true">
+			<resolver ref="local"/>
+			<resolver ref="main"/>
 		</chain>
 	</resolvers>
 </ivysettings>
