@@ -4,7 +4,7 @@
 	Build ALL projects in your source tree
     ================================= -->
 
-<project name="commonBuild" xmlns:ivy="antlib:org.apache.ivy.ant" basedir="." default="build">
+<project name="commonBuild" xmlns:ivy="antlib:org.apache.ivy.ant" basedir="." default="publish-local">
 	<property file="${basedir}/commonBuild.properties" />
 	<import file="${commonBuild.dir}/ivyBuild.xml"/>
 	
@@ -22,7 +22,7 @@
 		<subant target="publish" buildpathref="build-path" />
 	</target>
 	
-	<target name="publish-local" depends="buildlist" description="compile, jar and publish all projects in the right order to the LOCAL repository">
+	<target name="publish-local" depends="buildlist, build" description="compile, jar and publish all projects in the right order to the LOCAL repository">
 		<subant target="publish-local" buildpathref="build-path" />
 	</target>
 	
