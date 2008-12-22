@@ -39,7 +39,7 @@
          ================================= -->
     <target name="resolve" depends="load-ivy" description="-> resolve and retrieve dependencies with ivy">
     	<ivy:resolve file="${ivy.file}"/>
-    	<ivy:retrieve pattern="${lib.dir}/[type]/[artifact].[ext]" />
+    	<ivy:retrieve />
 
     	<ivy:cachepath pathid="compile.path" conf="compile" />
     	<pathconvert property="compile.lib" refid="compile.path"></pathconvert> 
@@ -58,31 +58,6 @@
         <ivy:report todir="${build.dir}"/>
     </target>
     
-    <!-- ================================= 
-          target: compile              
-         ================================= -->
-	<!--
-    <target name="compile" depends="resolve" description="-> compile the project">
-        <mkdir dir="${classes.dir}" />
-        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="lib.path.id" debug="true" />
-    </target>
-    -->
-    
-    <!-- ================================= 
-          target: run
-         ================================= -->
-    <!--
-     <path id="run.path.id">
-        <path refid="lib.path.id" />
-        <path location="${classes.dir}" />
-    </path>
-    
-	
-    <target name="run" depends="version, compile" description="-> compile and run the project">
-        <java classpathref="run.path.id" classname="${main.class.name}"/>
-    </target>
-   -->
-
 	<target name="ivy-new-version" depends="load-ivy" unless="ivy.new.revision">
     	<!-- default module version prefix value -->
 		<property name="module.version.prefix" value="${module.version.target}-dev-b" />
@@ -112,30 +87,15 @@
     </target>
 
     <!-- ================================= 
-          target: jar              
+          target: build.  Implementing projects expected to override this target and create a war/jar     
          ================================= -->
-    <!--
-    <target name="jar" depends="version, compile" description="-> make a jar file for this project">
-        <jar destfile="${jar.file}">
-            <fileset dir="${classes.dir}" />
-            <manifest>
-                <attribute name="Built-By" value="${user.name}"/>
-                <attribute name="Build-Version" value="${version}" />
-            </manifest>
-        </jar>
-    </target>
-    -->
-
-    <!-- ================================= 
-          target: install STUB          
-         ================================= -->
-    <target name="install" description="-> make a jar/war/ear/etc file for this project">
+    <target name="build" description="-> make a jar/war/ear/etc file for this project">
     </target>
 
     <!-- ================================= 
           target: publish              
          ================================= -->
-    <target name="publish" depends="clean-build, install, version" description="-> publish this project in the ivy repository">
+    <target name="publish" depends="clean-build, build, version" description="-> publish this project in the shared ivy repository">
     	<ivy:publish artifactspattern="${stage.dir}/[artifact].[ext]" 
     			           resolver="shared"
     			           pubrevision="${version}" 
@@ -147,7 +107,7 @@
     <!-- ================================= 
           target: publish-local              
          ================================= -->
-    <target name="publish-local" depends="install, local-version" description="-> publish this project in the local ivy repository">
+    <target name="publish-local" depends="build, local-version" description="-> publish this project in the local ivy repository">
     	<ivy:publish artifactspattern="${stage.dir}/[artifact].[ext]" 
     			        resolver="local"
     			        pubrevision="${version}"
@@ -168,14 +128,14 @@
 	<!-- ================================= 
           target: clean-lib              
          ================================= -->
-    <target name="clean-lib" description="-> clean the project libraries directory (dependencies)">
+    <target name="clean-lib" description="-> clean the project libraries (lib) directory">
         <delete includeemptydirs="true" dir="${lib.dir}"/>
     </target>
 
     <!-- ================================= 
           target: clean-build              
          ================================= -->
-    <target name="clean-build" description="-> clean the project built files">
+    <target name="clean-build" description="-> clean the built project file directories">
         <delete includeemptydirs="true" dir="${stage.dir}"/>
         <delete includeemptydirs="true" dir="${test.output.dir}"/>
     </target>
@@ -185,7 +145,24 @@
          ================================= -->
     <target name="clean" depends="clean-build, clean-lib" description="-> clean the project" />
 	
+    <!-- ================================= 
+          target: uberclean              
+         ================================= -->
+	<target name="uberclean" depends="clean, load-ivy" description="delete the ivy local repository, ivy cache, and project build">
+		<delete dir="${ivy.local.default.root}" />
+		<ivy:cleancache />
+		<echo>Successfully cleaned the ivy local repository, cache, and project build</echo>
+	</target>
+
 	<target name="usage">
-		<echo>In progress</echo>
+		<echo>Common ivy build file for all projects</echo>
+		<echo>Implementing projects are expected to define their own "build" target to build an archive file, either a jar, war, ear, etc</echo>
+		<echo>"publish" - publish archives to the shared company repository</echo>
+		<echo>"publish-local" - publish archives to your local repository</echo>
+		<echo>"clean-build" - clean the built project file directories</echo>
+		<echo>"clean-lib" - clean the project libraries (lib) directories</echo>
+		<echo>"clean-local" - cleans the local repository for the current module</echo>
+		<echo>"clean" - calls the "clean-build" and "clean-lib" targets to clean the dependencies and build for the project</echo>
+		<echo>"uberclean" - delete the ivy local repository, ivy cache, and project build</echo>
 	</target>
 </project>

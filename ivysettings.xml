@@ -4,7 +4,7 @@
 	<property name="ivy.shared.default.root"             value="${ivy.default.ivy.user.dir}/repository/shared" override="false"/>
 	<property name="ivy.local.default.ivy.pattern"      value="[organisation]/[module]/[type]s/[artifact]-[revision](-[classifier]).[ext]" override="false"/>
 	<property name="ivy.local.default.artifact.pattern" value="[organisation]/[module]/[type]s/[artifact]-[revision](-[classifier]).[ext]" override="false"/>
-	<settings defaultResolver="default"/>
+	<settings defaultResolver="default" validate="false"/>
 	<caches artifactPattern="[organisation]/[module]/[type]s/[artifact]-[revision](-[classifier]).[ext]"/>
 	<resolvers>
 		<filesystem name="local">
@@ -15,7 +15,7 @@
 			<ivy pattern="${ivy.shared.default.root}/${ivy.local.default.ivy.pattern}"/>
 			<artifact pattern="${ivy.shared.default.root}/${ivy.local.default.artifact.pattern}"/>
 		</filesystem>
-		<ibiblio name="public" m2compatible="true" usepoms="false" root="http://repo1.maven.org/maven2" pattern="[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
+		<ibiblio name="public" m2compatible="true" usepoms="false" root="http://repo1.maven.org/maven2" pattern="[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]" />
 		<ibiblio name="jboss" m2compatible="true" usepoms="false" root="http://repository.jboss.org/maven2" pattern="[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
 		<chain name="main" dual="true">
 			<resolver ref="shared"/>

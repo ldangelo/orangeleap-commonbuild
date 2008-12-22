@@ -4,7 +4,7 @@
 	Build ALL projects in your source tree
     ================================= -->
 
-<project name="commonBuild" xmlns:ivy="antlib:org.apache.ivy.ant" basedir="." default="install">
+<project name="commonBuild" xmlns:ivy="antlib:org.apache.ivy.ant" basedir="." default="build">
 	<property file="${basedir}/commonBuild.properties" />
 	<import file="${commonBuild.dir}/ivyBuild.xml"/>
 	
@@ -14,8 +14,8 @@
 		</ivy:buildlist>
 	</target>
 
-	<target name="install" depends="buildlist" description="Invokes the install target on each build file in the project tree">
-		<subant target="install" buildpathref="build-path" />
+	<target name="build" depends="buildlist" description="Invokes the 'build' target on each build file in the project tree">
+		<subant target="build" buildpathref="build-path" />
 	</target>
 	
 	<target name="publish" depends="buildlist" description="compile, jar and publish all projects in the right order to the SHARED repository">
@@ -26,14 +26,20 @@
 		<subant target="publish-local" buildpathref="build-path" />
 	</target>
 	
-	<!-- TODO: complete the below targets -->
 	<target name="clean-all" depends="buildlist" description="clean all projects">
-		<subant target="0. Clean" buildpathref="build-path" failonerror="false" /> <!-- TODO: remove failonerror -->
-	</target>
-
-	<target name="clean" depends="clean-all, load-ivy" description="clean tutorial: delete repository, ivy cache, and all projects">
-		<delete dir="repository" />
-		<ivy:cleancache />
+		<subant target="clean" buildpathref="build-path" failonerror="false" /> 
 	</target>
 	
+	<target name="usage">
+		<echo>"build" - Invokes the 'build' target on each build file in the project tree</echo>
+		<echo>"publish" - compile, jar and publish all projects in the right order to the SHARED repository</echo>
+		<echo>"publish-local" - compile, jar and publish all projects in the right order to the LOCAL repository</echo>
+		<echo>"clean-all" - calls the "clean-build" and "clean-lib" targets to clean the dependencies and builds for all projects</echo>
+
+
+		<echo>"clean-build" - clean the built project file directories</echo>
+		<echo>"clean-lib" - clean the project libraries (lib) directories</echo>
+		<echo>"clean-local" - cleans the local repository for the current module</echo>
+		<echo>"uberclean" - delete the ivy local repository, ivy cache, and project build</echo>
+	</target>
 </project>
