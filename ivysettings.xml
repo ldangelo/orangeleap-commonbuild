@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ivysettings>
 	<property name="ivy.local.default.root"             value="${ivy.default.ivy.user.dir}/repository/local" override="false"/>
-	<property name="ivy.shared.default.root"            value="${ivy.default.ivy.user.dir}/repository/shared" override="false"/>
 	<property name="ivy.local.default.ivy.pattern"      value="[organisation]/[module]/[type]s/[artifact]-[revision](-[classifier]).[ext]" override="false"/>
 	<property name="ivy.local.default.artifact.pattern" value="[organisation]/[module]/[type]s/[artifact]-[revision](-[classifier]).[ext]" override="false"/>
+	<property name="ivy.ibiblio.default.artifact.pattern" value="[module]/[type]s/[artifact]-[revision].[ext]" override="true"/>
+	
 	<settings defaultResolver="default" validate="false"/>
+	<credentials host="mpx-build.mpowersystems.com" realm="Sonatype Nexus Repository Manager" username="deployment" passwd="nemo"/>
 	<caches artifactPattern="[organisation]/[module]/[type]s/[artifact]-[revision](-[classifier]).[ext]"/>
 	<resolvers>
 		<filesystem name="local">
 			<ivy pattern="${ivy.local.default.root}/${ivy.local.default.ivy.pattern}"/>
 			<artifact pattern="${ivy.local.default.root}/${ivy.local.default.artifact.pattern}"/>
 		</filesystem>
-		<filesystem name="shared"> <!--  TODO: replaced shared definition with enterprise repository -->
-			<ivy pattern="${ivy.shared.default.root}/${ivy.local.default.ivy.pattern}"/>
-			<artifact pattern="${ivy.shared.default.root}/${ivy.local.default.artifact.pattern}"/>
-		</filesystem>
-		<ibiblio name="thirdparty" m2compatible="true" usepoms="false" root="http://mpx-build.mpowersystems.com:8081/nexus/content/groups/public" pattern="[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
+		<url name="shared">
+			<artifact pattern="http://mpx-build.mpowersystems.com:8081/nexus/content/repositories/releases/${ivy.ibiblio.default.artifact.pattern}" />
+		</url>
+		<ibiblio name="internalSnapshots" m2compatible="true" usepoms="false" root="http://mpx-build.mpowersystems.com:8081/nexus/content/groups/public-snapshots" pattern="[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
+		<ibiblio name="internalPublic" m2compatible="true" usepoms="false" root="http://mpx-build.mpowersystems.com:8081/nexus/content/groups/public" pattern="[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
 		<ibiblio name="public" m2compatible="true" usepoms="false" root="http://repo1.maven.org/maven2" pattern="[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]" />
 		<ibiblio name="jboss" m2compatible="true" usepoms="false" root="http://repository.jboss.org/maven2" pattern="[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
 		<ibiblio name="servicemax" m2compatible="true" usepoms="false" root="http://svn.apache.org/repos/asf/servicemix/m2-repo" pattern="[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
 		<chain name="main" dual="true">
 			<resolver ref="shared"/>
-			<resolver ref="thirdparty"/>
+			<resolver ref="internalSnapshots"/>
+			<resolver ref="internalPublic"/>
 			<resolver ref="public"/>
 			<resolver ref="jboss"/>
 			<resolver ref="servicemax"/>

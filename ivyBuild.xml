@@ -27,7 +27,7 @@
 			<fileset dir="${ivy.jar.dir}" includes="*.jar" />
 		</path>
 		<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path" />
-		<ivy:settings file="${commonBuild.dir}/ivysettings.xml" />
+		<ivy:settings file="${commonBuild.dir}/ivysettings.xml"/>
 	</target>
 
     <path id="lib.path.id">
@@ -97,9 +97,11 @@
          ================================= -->
     <target name="publish" depends="clean-build, build, version" description="-> publish this project in the shared ivy repository">
     	<ivy:publish artifactspattern="${stage.dir}/[artifact].[ext]" 
-    			           resolver="shared"
-    			           pubrevision="${version}" 
-    			           status="release"
+    			        resolver="shared"
+    			    	pubrevision="${version}" 
+    			        status="release"
+    					publishivy="false"
+    					overwrite="true"
     	/>
         <echo message="project ${ant.project.name} released with version ${version}" />
     </target>

@@ -22,7 +22,7 @@
 		<subant target="publish" buildpathref="build-path" />
 	</target>
 	
-	<target name="publish-local" depends="buildlist, build" description="compile, jar and publish all projects in the right order to the LOCAL repository">
+	<target name="publish-local" depends="buildlist" description="compile, jar and publish all projects in the right order to the LOCAL repository">
 		<subant target="publish-local" buildpathref="build-path" />
 	</target>
 	
