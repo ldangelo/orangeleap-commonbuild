@@ -29,7 +29,7 @@
 			<resolver ref="jboss"/>
 			<resolver ref="servicemax"/>
 		</chain>
-		<chain name="default" returnFirst="true" checkmodified="true">
+		<chain name="default" returnFirst="true" checkmodified="false">
 			<resolver ref="local"/>
 			<resolver ref="main"/>
 		</chain>
