@@ -6,7 +6,7 @@
 	<property name="ivy.ibiblio.default.artifact.pattern" value="[module]/[type]s/[artifact]-[revision].[ext]" override="true"/>
 	
 	<settings defaultResolver="default" validate="false"/>
-	<credentials host="mpx-build.mpowersystems.com" realm="Sonatype Nexus Repository Manager" username="deployment" passwd="nemo"/>
+	<credentials host="mpx-build.mpowersystems.com" realm="Sonatype Nexus Repository Manager" username="deployment" passwd="wiimario99"/>
 	<caches artifactPattern="[organisation]/[module]/[type]s/[artifact]-[revision](-[classifier]).[ext]"/>
 	<resolvers>
 		<filesystem name="local">
