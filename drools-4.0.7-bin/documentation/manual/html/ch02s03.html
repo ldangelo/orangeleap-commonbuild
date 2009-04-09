@@ -1,0 +1,112 @@
+<html xmlns="http://www.w3.org/TR/xhtml1/transitional"><head xmlns="">
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.3.&nbsp;Knowledge Representation</title><link rel="stylesheet" href="../shared/css/html.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_6797"><link rel="start" href="title.html" title="Drools"><link rel="up" href="ch02.html" title="Chapter&nbsp;2.&nbsp;The Rule Engine"><link rel="prev" href="ch02s02.html" title="2.2.&nbsp;Why use a Rule Engine?"><link rel="next" href="ch02s04.html" title="2.4.&nbsp;Rete Algorithm"><base xmlns="http://www.w3.org/TR/xhtml1/transitional" target="body"></base></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div xmlns="" class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.3.&nbsp;Knowledge Representation</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s02.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;2.&nbsp;The Rule Engine</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s04.html">Next</a></td></tr></table><hr></div><div xmlns="" class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e599"></a>2.3.&nbsp;Knowledge Representation</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e603"></a>2.3.1.&nbsp;First Order Logic</h3></div></div></div><p>Rules are written using First Order Logic, or predicate logic, which
+    extends Propositional Logic. <a class="ulink" href="http://en.wikipedia.org/wiki/Emil_Leon_Post" target="_top">Emil Leon Post</a>
+    was the first to develop an inference based system using symbols to
+    express logic - as a consequence of this he was able to prove that any
+    logical system (including mathematics) could be expressed with such a
+    system.</p><p>A proposition is a statement that can be classified as true or
+    false. If the truth can be determined from statement alone it is said to
+    be a "closed statement". In programming terms this is an expression that
+    does not reference any variables:</p><p>10 == 2 * 5</p><p>Expressions that evaluate against one or more variables, the facts,
+    are "open statements", in that we cannot determine whether the statement
+    is true until we have a variable instance to evaluate against:</p><p>Person.sex == "male"</p><p>With SQL if we look at the conclusion's action as simply returning
+    the matched fact to the user:</p><p>select * from People where People.sex == "male"</p><p>For any rows, which represent our facts, that are returned we have
+    inferred that those facts are male people. The following diagram shows how
+    the above SQL statement and People table can be represented in terms of an
+    Inference Engine.</p><div class="figure"><a name="d0e625"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="../shared/images/Chapter-Rule_Engine/Male_People.png" align="middle" alt="SQL as a simplistic Inference Engine"></div></div><p class="title"><b>Figure&nbsp;2.4.&nbsp;SQL as a simplistic Inference Engine</b></p></div><br class="figure-break"><p>So in Java we can say that a simple proposition is of the form
+    'variable' 'operator' 'value' - where we often refer to 'value' as being a
+    literal value - a proposition can be thought as a field constraint.
+    Further to this propositions can be combined with conjunctive and
+    disjunctive connectives, which is the logic theorists way of saying
+    '&amp;&amp;' and '||'. The following shows two open propositional
+    statements connected together with a single disjunctive connective.</p><pre class="programlisting">
+      
+      person.getEyeColor().equals("blue") || person.getEyeColor().equals("green") 
+      
+    </pre><p>This can be expressed using a disjunctive Conditional Element
+    connective - which actually results in the generation of two rules, to
+    represent the two possible logic outcomes.</p><pre class="programlisting">
+      
+      Person( eyeColour == "blue" ) || Person( eyeColor == "green" )
+      
+    </pre><p>Disjunctive field constraints connectives could also be used and
+    would not result in multiple rule generation.</p><pre class="programlisting">
+      
+      Person( eyeColour == "blue"|| == "green" )
+      
+    </pre><p>Propositional Logic is not Turing complete, limiting the problems
+    you can define, because it cannot express criteria for the structure of
+    data. First Order Logic (FOL), or Predicate Logic, extends Propositional
+    Logic with two new quantifier concepts to allow expressions defining
+    structure - specifically universal and existential quantifiers. Universal
+    quantifiers allow you to check that something is true for everything;
+    normally supported by the 'forall' conditional element. Existential
+    quantifiers check for the existence of something, in that it occurs at
+    least once - this is supported with 'not' and 'exists' conditional
+    elements.</p><p>Imagine we have two classes - Student and Module. Module represents
+    each of the courses the Student attended for that semester, referenced by
+    the List collection. At the end of the semester each Module has a score.
+    If the Student has a Module score below 40 then they will fail that
+    semester - the existential quantifier can be used used with the "less than
+    40" open proposition to check for the existence of a Module that is true
+    for the specified criteria.</p><pre class="programlisting">
+    
+    public class Student {
+    private String name;
+    private List modules;
+
+    ...
+    }
+       
+    </pre><pre class="programlisting">
+    
+    public class Module {
+    private String name;
+    private String studentName;
+    private int score;
+    
+    </pre><p>Java is Turing complete in that you can write code, among other
+    things, to iterate data structures to check for existence. The following
+    should return a List of students who have failed the semester.</p><pre class="programlisting">
+    
+    List failedStudents = new ArrayList();
+    
+    for ( Iterator studentIter = students.iterator(); studentIter.hasNext() {
+        Student student = ( Student ) studentIter.next();
+        for ( Iterator it = student.getModules.iterator(); it.hasNext(); ) {
+            Module module = ( Module ) it.next();
+            if ( module.getScore() &lt; 40  ) {
+                failedStudents.add( student ) ;
+                break;
+            }
+        }
+    }
+    
+    </pre><p>Early SQL implementations were not Turing complete as they did not
+    provide quantifiers to access the structure of data. Modern SQL engines do
+    allow nesting of SQL, which can be combined with keywords like 'exists'
+    and 'in'. The following show SQL and a Rule to return a set of Students
+    who have failed the semester.</p><pre class="programlisting">
+
+      select 
+    * 
+from 
+    Students s 
+where exists (  
+    select 
+        * 
+    from 
+        Modules m 
+    where 
+        m.student_name = s.name and 
+        m.score &lt; 40 
+)
+
+    </pre><p></p><pre class="programlisting">
+
+    rule "Failed_Students"
+    when
+        exists( $student : Student() &amp;&amp; Module( student == $student, score &lt; 40 ) )
+    
+    </pre><p></p></div></div><div xmlns="" class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s02.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.2.&nbsp;Why use a Rule Engine?&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="title.html">Home</a>&nbsp;|&nbsp;<a accesskey="t" href="bk01-toc.html">ToC</a></td><td width="40%" align="right" valign="top">&nbsp;2.4.&nbsp;Rete Algorithm</td></tr></table></div></body></html>

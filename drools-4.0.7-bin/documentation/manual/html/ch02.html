@@ -1,0 +1,108 @@
+<html xmlns="http://www.w3.org/TR/xhtml1/transitional"><head xmlns="">
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;2.&nbsp;The Rule Engine</title><link rel="stylesheet" href="../shared/css/html.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_6797"><link rel="start" href="title.html" title="Drools"><link rel="up" href="pt01.html" title="Part&nbsp;I.&nbsp;Reference Manual"><link rel="prev" href="ch01s02.html" title="1.2.&nbsp;Upgrade tips from Drools 3.0.x to Drools 4.0.x"><link rel="next" href="ch02s02.html" title="2.2.&nbsp;Why use a Rule Engine?"><base xmlns="http://www.w3.org/TR/xhtml1/transitional" target="body"></base></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div xmlns="" class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;2.&nbsp;The Rule Engine</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch01s02.html">Prev</a>&nbsp;</td><th width="60%" align="center">Part&nbsp;I.&nbsp;Reference Manual</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s02.html">Next</a></td></tr></table><hr></div><div xmlns="" class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d0e373"></a>Chapter&nbsp;2.&nbsp;The Rule Engine</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e376"></a>2.1.&nbsp;What is a Rule Engine?</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e379"></a>2.1.1.&nbsp;Introduction and Background</h3></div></div></div><p>Artificial Intelligence (A.I.) is a very broad research area that
+    focuses on "Making computers think like people" and includes disciplines
+    such as Neural Networks, Genetic Algorithms, Decision Trees, Frame Systems
+    and Expert Systems. Knowledge representation is the area of A.I. concerned
+    with how knowledge is represented and manipulated. Expert Systems use
+    Knowledge representation to facilitate the codification of knowledge into
+    a knowledge base which can be used for reasoning - i.e. we can process
+    data with this knowledge base to infer conclusions. Expert Systems are
+    also known as Knowledge-based Systems and Knowledge-based Expert Systems
+    and are considered 'applied artificial intelligence'. The process of
+    developing with an Expert System is Knowledge Engineering. EMYCIN was one
+    of the first "shells" for an Expert System, which was created from the
+    MYCIN medical diagnosis Expert System. Where-as early Expert Systems had
+    their logic hard coded, "shells" separated the logic from the system,
+    providing an easy to use environment for user input. Drools is a Rule
+    Engine that uses the Rule Based approached to implement an Expert System
+    and is more correctly classified as a Production Rule System.</p><p>The term "Production Rule" originates from formal grammar - where it
+    is described as "an abstract structure that describes a formal language
+    precisely, i.e., a set of rules that mathematically delineates a (usually
+    infinite) set of finite-length strings over a (usually finite) alphabet"
+    (<a class="ulink" href="http://en.wikipedia.org/wiki/Formal_grammar" target="_top">wikipedia</a>).</p><p>Business Rule Management Systems build additional value on top of a
+    general purpose Rule Engines by providing, business user focused, systems
+    for rule creation, management, deployment, collaboration, analysis and end
+    user tools. Further adding to this value is the fast evolving and popular
+    methodology "Business Rules Approach", which is a helping to formalize the
+    role of Rule Engines in the enterprise.</p><p>The term Rule Engine is quite ambiguous in that it can be any system
+    that uses rules, in any form, that can be applied to data to produce
+    outcomes; which includes simple systems like form validation and dynamic
+    expression engines. The book "How to Build a Business Rules Engine (2004)"
+    by Malcolm Chisholm exemplifies this ambiguity. The book is actually about
+    how to build and alter a database schema to hold validation rules. The
+    book then shows how to generate VB code from those validation rules to
+    validate data entry - while a very valid and useful topic for some, it
+    caused quite a surprise to this author, unaware at the time in the
+    subtleties of Rules Engines differences, who was hoping to find some
+    hidden secrets to help improve the Drools engine. JBoss jBPM uses
+    expressions and delegates in its Decision nodes; which control the
+    transitions in a Workflow. At each node it evaluates has a rule set that
+    dictates the transition to undertake - this is also a Rule Engine. While a
+    Production Rule System is a kind of Rule Engine and also an Expert System,
+    the validation and expression evaluation Rule Engines mention previously
+    are not Expert Systems.</p><p>A Production Rule System is turing complete with a focus on
+    knowledge representation to express propositional and first order logic in
+    a concise, non ambiguous and declarative manner. The brain of a Production
+    Rules System is an Inference Engine that is able to scale to a large
+    number of rules and facts. The Inference Engine matches facts and data,
+    against Production Rules, also called Productions or just Rules, to infer
+    conclusions which result in actions. A Production Rule is a two-part
+    structure using First Order Logic for knowledge representation.</p><pre class="programlisting">when
+    &lt;conditions&gt;
+then
+    &lt;actions&gt;</pre><p>The process of matching the new or existing facts against Production
+    Rules is called <a class="indexterm" name="d0e399"></a> Pattern Matching, which is performed by the <a class="indexterm" name="d0e403"></a> Inference Engine. There are a number of algorithms used for
+    Pattern Matching by Inference Engines including:</p><div class="itemizedlist"><ul type="disc"><li><p>Linear</p></li><li><p>Rete</p></li><li><p>Treat</p></li><li><p>Leaps</p></li></ul></div><p>Drools implements and extends the <a class="indexterm" name="d0e422"></a> Rete algorith, <a class="indexterm" name="d0e426"></a> Leaps use to be supported but was removed due to poor
+    maintenance. The Drools <a class="indexterm" name="d0e430"></a> Rete implementation is called ReteOO, signifying that
+    Drools has an enhanced and optimized implementation of the Rete algorithm
+    for Object Oriented systems. Other Rete based engines also have marketing
+    terms for their proprietary enhancements to Rete, like RetePlus and Rete
+    III. It is important to understand that names like Rete III are purely
+    marketing where, unlike the original published Rete Algorithm, no details
+    of the implementation are published. This makes questions such as "Does
+    Drools implement Rete III?" nonsensical. The most common enhancements are
+    covered in "Production Matching for Large Learning Systems (Rete/UL)"
+    (1995) by Robert B. Doorenbos.</p><p>The Rules are stored in the <a class="indexterm" name="d0e436"></a> Production Memory and the facts that the Inference Engine
+    matches against the <a class="indexterm" name="d0e440"></a> Working Memory. Facts are asserted into the Working Memory
+    where they may then be modified or retracted. A system with a large number
+    of rules and facts may result in many rules being true for the same fact
+    assertion, these rules are said to be in conflict. The Agenda manages the
+    execution order of these conflicuting rules using a Conflict Resolution
+    strategy.</p><div class="figure"><a name="d0e444"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="../shared/images/Chapter-Rule_Engine/Rule_Engine.png" align="middle" alt="A Basic Rete network"></div></div><p class="title"><b>Figure&nbsp;2.1.&nbsp;A Basic Rete network</b></p></div><br class="figure-break"><p>A Production Rule System's Inference Engine is stateful and able to
+    enforce truthfulness - called Truth Maintence. A logical relationship can
+    be declared by actions which means the action's state depends on the
+    inference remaining true; when it is no longer true the logical dependent
+    action is undone. The "Honest Politician" is an example of Truth
+    Maintenance, which always ensures that hope can only exist for a
+    democracy while we have honest politicians.</p><pre class="programlisting">
+when
+    an honest Politician exists
+then
+    logically assert Hope
+
+when
+   Hope exists
+then
+   print "Hurrah!!! Democracy Lives" 
+
+when
+   Hope does not exist
+then
+   print "Democracy is Doomed" 
+</pre><p>There are two methods of execution for a Production Rule Systems -
+    Forward Chaining and Backward Chaining; systems that implement both are
+    called Hybrid Production Rule Systems. Understanding these two modes of
+    operation are key to understanding why a Production Rule System is
+    different and how to get the best from them. Forward chaing is
+    'data-driven' and thus reactionary - facts are asserted into the working
+    memory which results in one or more rules being concurrently true and
+    scheduled for execution by the Agenda - we start with a fact, it
+    propagates and we end in a conclusion. Drools is a forward chaining
+    engine.</p><div class="figure"><a name="d0e458"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="../shared/images/Chapter-Rule_Engine/Forward_Chaining.png" align="middle" alt="Forward Chaining"></div></div><p class="title"><b>Figure&nbsp;2.2.&nbsp;Forward Chaining</b></p></div><br class="figure-break"><p>Backward chaining is 'goal-driven', meaning that we start with a
+    conclusion which the engine tries to satisfy. If it can't it then searches
+    for conclusions that it can, known as 'sub goals', that will help satisfy
+    some unknown part of the current goal - it continues this process until
+    either the initial conclusion is proven or there are no more sub goals.
+    Prolog is an example of a Backward Chaining engine; Drools will be adding
+    support for Backward Chaining in its next major release.</p><div class="figure"><a name="d0e468"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="../shared/images/Chapter-Rule_Engine/Backward_Chaining.png" align="middle" alt="Backward Chaining"></div></div><p class="title"><b>Figure&nbsp;2.3.&nbsp;Backward Chaining</b></p></div><br class="figure-break"></div></div></div><div xmlns="" class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch01s02.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="pt01.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">1.2.&nbsp;Upgrade tips from Drools 3.0.x to Drools 4.0.x&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="title.html">Home</a>&nbsp;|&nbsp;<a accesskey="t" href="bk01-toc.html">ToC</a></td><td width="40%" align="right" valign="top">&nbsp;2.2.&nbsp;Why use a Rule Engine?</td></tr></table></div></body></html>

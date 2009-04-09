@@ -1,0 +1,200 @@
+<html xmlns="http://www.w3.org/TR/xhtml1/transitional"><head xmlns="">
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;4.&nbsp;Decision Tables</title><link rel="stylesheet" href="../shared/css/html.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_6797"><link rel="start" href="title.html" title="Drools"><link rel="up" href="pt01.html" title="Part&nbsp;I.&nbsp;Reference Manual"><link rel="prev" href="ch03s05.html" title="3.5.&nbsp;Eclipse"><link rel="next" href="ch05.html" title="Chapter&nbsp;5.&nbsp;The (Eclipse based) Rule IDE"><base xmlns="http://www.w3.org/TR/xhtml1/transitional" target="body"></base></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div xmlns="" class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Decision Tables</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s05.html">Prev</a>&nbsp;</td><th width="60%" align="center">Part&nbsp;I.&nbsp;Reference Manual</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td></tr></table><hr></div><div xmlns="" class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d0e1896"></a>Chapter&nbsp;4.&nbsp;Decision Tables</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1899"></a>4.1.&nbsp;Decision tables in spreadsheets</h2></div></div></div><p>Decision tables are a "precise yet compact" (ref. Wikipedia) way of
+  representing conditional logic, and are well suited to "business" level
+  rules.</p><p>Drools supports managing rules in a Spreadsheet format. Formats
+  supported are Excel, and CSV. Thus you can use a variety of spreadsheet
+  programs (such as Microsoft Excel, OpenOffice.org Calc amongst others). It
+  is expected that web based decision table editors will be included in a near
+  future release.</p><p>Decision tables are an old concept (in software terms) but have proven
+  useful over the years. Very briefly speaking, in Drools decision tables are
+  a way to generate rules driven from the data entered into a spreadsheet. All
+  the usual features of a spreadsheet for data capture and manipulation can be
+  taken advantage of.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1908"></a>4.1.1.&nbsp;When to use Decision tables</h3></div></div></div><p>You may want to consider decision tables if you have rules that can
+    be expressed as rule templates + data. In each row of a decision table,
+    data is collected that is combined with the templates to generate a
+    rule.</p><p>Many businesses already use spreadsheets for managing data,
+    calculations etc. If you are happy to continue this way, you can also
+    manage your business rules this way. This also assumes you are happy to
+    manage packages of rules in .xls or .csv files. Decision tables are not
+    recommenced for rules that do not follow a set of templates, or where
+    there are a small number of rules (or if you don't want to use software
+    like excel or open office). They are ideal in the sense that you can
+    control what "parameters" of rules can be edited, without exposing the
+    rules directly.</p><p>Decision tables also provide a degree of insulation from the
+    underlying object model.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1917"></a>4.1.2.&nbsp;Overview</h3></div></div></div><p>Here are some examples of real world decision tables (slightly
+    edited to protect the innocent).</p><div class="screenshot"><div class="mediaobject"><img src="../shared/images/Chapter-Decision_Tables/excel.png"></div></div><div class="screenshot"><div class="mediaobject"><img src="../shared/images/Chapter-Decision_Tables/actions.png"></div></div><div class="screenshot"><div class="mediaobject"><img src="../shared/images/Chapter-Decision_Tables/open_office.png"></div></div><p>In the above examples, the technical aspects of the decision table
+    have been collapsed away (standard spreadsheet feature).</p><p>The rules start from row 17 (each row results in a rule). The
+    conditions are in column C, D, E etc.. (off screen are the actions). You
+    can see that the value in the cells are quite simple, and have meaning
+    when you look at the headers in Row 16. Column B is just a description. It
+    is conventional to use color to make it obvious what the different areas
+    of the table mean.</p><p>Note that although the decision tables look like they process top
+    down, this is not necessarily the case. It is ideal if you can author
+    rules in such a way as order does not matter (simply as it makes
+    maintenance easier, you are not trying to shift rows around all the time).
+    As each row is a rule, the same principles apply. As the rule engine
+    processes the facts, any rules that match may fire (some people are
+    confused by this - it is possible to clear the agenda when a rule fires
+    and simulate a very simple decision table where the first match exists).
+    Also note that you can have multiple tables on the one spreadsheet (so
+    rules can be grouped where they share common templates - yet at the end of
+    the day they are all combined into a one rule package). Decision tables
+    are essentially a tool to generate DRL rules automatically.</p><div class="screenshot"><div class="mediaobject"><img src="../shared/images/Chapter-Decision_Tables/multi_table.png"></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1952"></a>4.1.3.&nbsp;How decision tables work</h3></div></div></div><p>The key point to keep in mind is that in a decision table, each row
+    is a rule, and each column in that row is either a condition or action for
+    that rule.</p><div class="screenshot"><div class="mediaobject"><img src="../shared/images/Chapter-Decision_Tables/row_col.png"></div></div><p>The spreadsheet looks for the "RuleTable" keyword to indicate the
+    start of a rule table (both the starting row and column). Other keywords
+    are also used to define other package level attributes (covered later). It
+    is important to keep the keywords in the one column. By convention the
+    second column ("B") is used for this, but it can be any column (convention
+    is to leave a margin on the left for notes). In the following diagram, C
+    is actually the column where it starts. Everything to the left of this is
+    ignored.</p><p>If we expand the hidden sections, it starts to make more sense how
+    it works. Note the keywords in column C.</p><div class="screenshot"><div class="mediaobject"><img src="../shared/images/Chapter-Decision_Tables/expanded.png"></div></div><p>Now you can see the hidden magic that makes it work. The RuleSet
+    keyword indicates the name to be used in the "rule package" that all the
+    rules will come under (the name is optional, it will have a default but
+    you MUST have the "RuleSet" keyword) in the cell immediately to the right.
+    The other keywords visible in Column C are: Import, Sequential which will
+    be covered later - just note that in general the keywords make up
+    name/value pairs. The RuleTable keyword is important as it indicates that
+    a chunk of rules will follow, based on some rule templates. After the
+    RuleTable keyword there is a name - this name is used to prefix the
+    generated rules names (the row numbers are appended to create unique rule
+    names). The column of RuleTable indicates the column in which the rules
+    start (columns to the left are ignored).</p><p>Referring to row 14 (the row immediately after RuleTable): the
+    keywords CONDITION and ACTION indicate that the data in the columns below
+    are for either the LHS or the RHS parts of a rule. There are other
+    attributes on the rule which can also be optionally set this way.</p><p>Row 15 contains declarations of "ObjectTypes" - the content in this
+    row is optional (if you are not using it, you must leave a blank row - but
+    you *will* want to use it !). When you use this row, the values in the
+    cells below (row 16) become constraints on that object type. In the above
+    case, it will generate: Person(age=="42") etc (where 42 comes from row
+    18). In the above example, the "==" is implicit (if you just put a field
+    name, it will assume that you are looking for exact matches). Also note
+    that you can have a ObjectType declaration span columns (via merged cells)
+    - and that means that all columns below the merged range will be combined
+    into the one set of constraints.</p><p>Row 16 contains the rule templates themselves: note that they can
+    use the "$para" place holder to indicate where data from the cells below
+    will be populated (you can use $param, or $1, $2 etc to indicate
+    parameters from a comma separated list in a cell below). Row 17 is ignored
+    - it is textual descriptions of the rule template.</p><p>Row 18 to 19 shows data, which will be combined (interpolated) with
+    the templates in row 15, to generate rules. If a cell contains no data,
+    then its template is ignored (eg it means that condition, or action, does
+    not apply for that rule-row). Rule rows are read until there is a BLANK
+    row. You can have multiple RuleTables in a sheet. Row 20 contains another
+    keyword, and a value - the row positions of keywords like this do not
+    matter (most people put them at the top) but their column should be the
+    same one where the RuleTable or RuleSet keywords should appear (in this
+    case column C has been chosen to be significant, but you can use column A
+    if you like).</p><p>In the above example, rules would be rendered like the following (as
+    it uses the "ObjectType" row): </p><pre class="programlisting">//row 18
+rule "Cheese_fans_18"
+  when
+    Person(age=="42")
+    Cheese(type=="stilton")
+  then
+    list.add("Old man stilton");
+end
+
+</pre><p> Note that the [age=="42"] and [type=="stilton"] are
+    interpreted as single constraints to be added to the respective ObjectType
+    in the cell above (if the cells above were spanned, then there could be
+    multiple constraints on one "column".</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1988"></a>4.1.4.&nbsp;Keywords and syntax</h3></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1991"></a>4.1.4.1.&nbsp;Syntax of templates</h4></div></div></div><p>The syntax of what goes in the templates is dependent on if it is
+      a CONDITION column or ACTION column. In most cases, it is identical to
+      "vanilla" DRL for the LHS or RHS respectively. This means in the LHS,
+      the constraint language must be used, and in the RHS it is a snippet of
+      code to be executed.</p><p>The "$param" place holder is used in templates to indicate where
+      data form the cell will be interpolated. You can also use "$1" to the
+      same effect. If the cell contains a comma separated list of values, $1
+      and $2 etc. may be used to indicate which positional parameter from the
+      list of values in the cell will be used. </p><pre class="programlisting">For example: If the templates is [Foo(bar == $param)] and the cell is [ 42 ] then the result will be [Foo(bar == 42)]
+If the template is [Foo(bar &lt; $1, baz == $2)] and the cell is [42,42] then the result will be [Foo(bar &gt; 42, baz ==42)]
+</pre><p>For conditions: How snippets are rendered depends on if there is
+      anything in the row above (where ObjectType declarations may appear). If
+      there is, then the snippets are rendered as individual constraints on
+      that ObjectType. If there isn't, then they are just rendered as is (with
+      values substituted). If you put just a plain field (as in the example
+      above) then it will assume you mean equality. If you put another
+      operator at the end of the snippet, then the values will put
+      interpolated at the end of the constraint, otherwise it will look for
+      "$param" as outlined previously.</p><p>For consequences: How snippets are rendered also depends on if
+      there is anything in the row immediately above it. If there is nothing
+      there, the output is simple the interpolated snippets. If there is
+      something there (which would typically be a bound variable or a global
+      like in the example above) then it will append it as a method call on
+      that object (refer to the above example).</p><p>This may be easiest to understand with some examples below.
+      </p><div class="screenshot"><div class="mediaobject"><img src="../shared/images/Chapter-Decision_Tables/spanned_column.png"></div></div><p> The above shows how the Person ObjectType declaration
+      spans 2 columns in the spreadsheet, thus both constraints will appear as
+      Person(age == ... , type == ...). As before, as only the field names are
+      present in the snippet, they imply an equality test. </p><div class="screenshot"><div class="mediaobject"><img src="../shared/images/Chapter-Decision_Tables/with_param.png"></div></div><p> The above condition example shows how you use
+      interpolation to place the values in the snippet (in this case it would
+      result in Person(age == "42")).</p><div class="screenshot"><div class="mediaobject"><img src="../shared/images/Chapter-Decision_Tables/operator_completion.png"></div></div><p> The above condition example show that if you put an
+      operator on the end by itself, the values will be placed after the
+      operator automatically. </p><div class="screenshot"><div class="mediaobject"><img src="../shared/images/Chapter-Decision_Tables/with_binding.png"></div></div><p> You can of course put a binding in before the column
+      (the constraints will be added from the cells below). You can put
+      anything in the ObjectType row (eg it could be a pre condition for the
+      columns in the spreadsheet columns that follow).</p><div class="screenshot"><div class="mediaobject"><img src="../shared/images/Chapter-Decision_Tables/consequence.png"></div></div><p> This shows how the consequence could be done the by
+      simple interpolation (just leave the cell above blank, the same applies
+      to condition columns) - with this style you can put whatever you want in
+      the consequence (not just one method call).</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e2031"></a>4.1.4.2.&nbsp;Keywords</h4></div></div></div><p>The following table describes the keywords that are pertinent to
+      the rule table structure.</p><div class="table"><a name="d0e2036"></a><p class="title"><b>Table&nbsp;4.1.&nbsp;Keywords</b></p><div class="table-contents"><table summary="Keywords" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Keyword</th><th>Description</th><th>Is required?</th></tr></thead><tbody><tr><td>RuleSet</td><td>The cell to the right of this contains the ruleset
+              name</td><td>One only (if left out, it will default)</td></tr><tr><td>Sequential</td><td>The cell to the right of this can be true or false. If
+              true, then salience is used to ensure that rules fire from the
+              top down</td><td>optional</td></tr><tr><td>Import</td><td>The cell to the right contains a comma separated list of
+              java classes to import</td><td>optional</td></tr><tr><td>RuleTable</td><td>A cell starting with RuleTable indicates the start of a
+              definition of a rule table. The actual rule table starts the
+              next row down. The rule table is read left-to-right, and
+              top-down, until there is one BLANK ROW.</td><td>at least one. if there are more, then they are all added
+              to the one ruleset</td></tr><tr><td>CONDITION</td><td>Indicates that this column will be for rule
+              conditions</td><td>At least one per rule table</td></tr><tr><td>ACTION</td><td>Indicates that this column will be for rule
+              consequences</td><td>At least one per rule table</td></tr><tr><td>PRIORITY</td><td>Indicates that this columns values will set the
+              'salience' values for the rule row. Over-rides the 'Sequential'
+              flag.</td><td>optional</td></tr><tr><td>DURATION</td><td>Indicates that this columns values will set the duration
+              values for the rule row.</td><td>optional</td></tr><tr><td>NAME</td><td>Indicates that this columns values will set the name for
+              the rule generated from that row</td><td>optional</td></tr><tr><td>Functions</td><td>The cell immediately to the right can contain functions
+              which can be used in the rule snippets. Drools supports
+              functions defined in the DRL, allowing logic to be embedded in
+              the rule, and changed without hard coding, use with care. Same
+              syntax as regular DRL.</td><td>optional</td></tr><tr><td>Variables</td><td>The cell immediately to the right can contain global
+              declarations which drools supports. This is a type, followed by a
+              variable name. (if multiple variables are needed, comma separate
+              them).</td><td>optional</td></tr><tr><td>NO-LOOP</td><td>if there is a column with the this keyword, the
+              no-loop attribute will be set for the rule. Setting no-loop column means the attempt to create the Activation for the current set of data will be ignored.</td><td>optional</td></tr><tr><td>ACTIVATION-GROUP</td><td>Cell values in this column mean that the rule-row belongs
+              to the given XOR/activation group . An Activation group means
+              that only one rule in the named group will fire (ie the first
+              one to fire cancels the other rules activations).</td><td>optional</td></tr><tr><td>RULEFLOW-GROUP</td><td>Cell values in this column mean that the rule-row belongs
+              to the given RULEFLOW-GROUP. Ruleflow allows you to specify the order in which rule sets should be evaluated by using a flow chart. See the documentation for ruleflow on this manual</td><td>optional</td></tr><tr><td>Worksheet</td><td>By default, the first worksheet is only looked at for
+              decision tables.</td><td>N/A</td></tr></tbody></table></div></div><br class="table-break"><div class="screenshot"><div class="mediaobject"><img src="../shared/images/Chapter-Decision_Tables/Key.png"></div></div><div class="screenshot"><div class="mediaobject"><img src="../shared/images/Chapter-Decision_Tables/keywords.png"></div></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2166"></a>4.1.5.&nbsp;Creating and integrating Spreadsheet based Decision Tables</h3></div></div></div><p>The API to use spreadsheet based decision tables is in the
+    drools-decisiontables module. There is really only one class to look at:
+    SpreadsheetCompiler. This class will take spreadsheets in various formats,
+    and generate rules in DRL (which you can then use in the normal way). Also
+    note that if you like you can just use the SpreadsheetComiler to generate
+    partial rule files, and assemble it into a complete rule package after the
+    fact (this allows to you seperate technical and non technical aspects of
+    the rules if needed).</p><p>To get started, you can find a sample spreadsheet and base it on
+    that. Alternatively, if you are using the plug in (Rule Workbench IDE) the
+    wizard can generate a spreadsheet for you from a template (to edit it you
+    will need to use an xls compatible spreadsheet editor). </p><div class="screenshot"><div class="mediaobject"><img src="../shared/images/Chapter-Decision_Tables/wizard.png"></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2179"></a>4.1.6.&nbsp;Managing business rules in decision tables.</h3></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e2182"></a>4.1.6.1.&nbsp;Workflow and collaboration.</h4></div></div></div><p>Spreadsheets are well established business tools (in use for over
+      25 years). Decision tables lend themselves to close collaboration
+      between IT and domain experts, while making the business rules clear to
+      business analysts, it is an ideal separation of concerns.</p><p>Typically, the whole process of authoring rules (coming up with a
+      new decision table) would be something like:</p><div class="orderedlist"><ol type="1"><li><p>Business analyst takes a template decision table (from a
+          repository, or from IT)</p></li><li><p>Decision table business language descriptions are entered in
+          the table(s)</p></li><li><p>Decision table rules (rows) are entered (roughly)</p></li><li><p>Decision table is handed to a technical resource, who maps the
+          business language (descriptions) to scripts (this may involve
+          software development of course, if it is a new application or data
+          model !)</p></li><li><p>Technical person hands back and reviews the modifications with
+          the business analyst.</p></li><li><p>The business analyst can continue editing the rule rows as
+          needed (moving columns around is also fine etc).</p></li><li><p>In parallel, the technical person can develop test cases for
+          the rules (liaising with business analysts) as these test cases can
+          be used to verify rules and rule changes once the system is
+          running.</p></li></ol></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e2211"></a>4.1.6.2.&nbsp;Using spreadsheet features</h4></div></div></div><p>You can use the features of applications like Excel to provide
+      assistance in entering data into spreadsheets, such as validating
+      fields. You can use lists that are stored in other worksheets to provide
+      valid lists of values for cells, like in the following diagram.
+      </p><div class="screenshot"><div class="mediaobject"><img src="../shared/images/Chapter-Decision_Tables/lists.png"></div></div><p>Some applications provide a limited ability to keep a history of
+      changes, but it is recommended that an alternative means of revision
+      control is also used. So when you are making changes to rules over time,
+      older versions are archived (many solutions exist for this which are
+      also open source, such as Subversion).
+      http://www.drools.org/Business+rules+in+decision+tables+explained</p></div></div></div></div><div xmlns="" class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s05.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="pt01.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.5.&nbsp;Eclipse&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="title.html">Home</a>&nbsp;|&nbsp;<a accesskey="t" href="bk01-toc.html">ToC</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;5.&nbsp;The (Eclipse based) Rule IDE</td></tr></table></div></body></html>

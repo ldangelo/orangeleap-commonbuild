@@ -1,0 +1,27 @@
+<html xmlns="http://www.w3.org/TR/xhtml1/transitional"><head xmlns="">
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>6.4.&nbsp;Function</title><link rel="stylesheet" href="../shared/css/html.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_6797"><link rel="start" href="title.html" title="Drools"><link rel="up" href="ch06.html" title="Chapter&nbsp;6.&nbsp;The Rule Language"><link rel="prev" href="ch06s03.html" title="6.3.&nbsp;Package"><link rel="next" href="ch06s05.html" title="6.5.&nbsp;Rule"><base xmlns="http://www.w3.org/TR/xhtml1/transitional" target="body"></base></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div xmlns="" class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">6.4.&nbsp;Function</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch06s03.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;6.&nbsp;The Rule Language</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch06s05.html">Next</a></td></tr></table><hr></div><div xmlns="" class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e2964"></a>6.4.&nbsp;Function</h2></div></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p><em class="replaceable"><code>(updated to Drools 4.0)</code></em></p></div><div class="figure"><a name="d0e2971"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="../shared/images/Chapter-Rule_Language/function.png" align="middle" alt="function"></div></div><p class="title"><b>Figure&nbsp;6.7.&nbsp;function</b></p></div><br class="figure-break"><p>Functions are a way to put semantic code in your rule source file, as
+  opposed to in normal java classes. They can't do anything more then what you
+  can do with helper classes (in fact, the compiler generates the helper class
+  for you behind the scenes). The main advantage of using functions in a rule
+  is that you can keep the logic all in one place, and you can change the
+  functions as needed (this can be a good and bad thing). Functions are most
+  useful for invoking actions on the consequence ("then") part of a rule,
+  especially if that particular action is used over and over (perhaps with
+  only differing parameters for each rule - for example the contents of an
+  email message).</p><p>A typical function declaration looks like:</p><pre class="programlisting">function String hello(String name) {
+    return "Hello "+name+"!";
+}
+</pre><p>Note that the "function" keyword is used, even though its not really
+  part of java. Parameters to the function are just like a normal method (and
+  you don't have to have parameters if they are not needed). Return type is
+  just like a normal method.</p><p>An alternative to the use of a function, could be to use a static
+  method in a helper class: Foo.hello(). Drools 4.0 supports the use of
+  function imports, so all you would need to do is:</p><pre class="programlisting">import function my.package.Foo.hello</pre><p>In both cases above, to use the function, just call it by its name in
+  the consequence or inside a semantic code block. Example:</p><pre class="programlisting">rule "using a static function"
+when 
+    eval( true )
+then
+    System.out.println( hello( "Bob" ) );
+end
+</pre></div><div xmlns="" class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch06s03.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch06.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch06s05.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">6.3.&nbsp;Package&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="title.html">Home</a>&nbsp;|&nbsp;<a accesskey="t" href="bk01-toc.html">ToC</a></td><td width="40%" align="right" valign="top">&nbsp;6.5.&nbsp;Rule</td></tr></table></div></body></html>

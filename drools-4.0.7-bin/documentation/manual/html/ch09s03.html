@@ -1,0 +1,89 @@
+<html xmlns="http://www.w3.org/TR/xhtml1/transitional"><head xmlns="">
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>9.3.&nbsp;Architecture</title><link rel="stylesheet" href="../shared/css/html.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_6797"><link rel="start" href="title.html" title="Drools"><link rel="up" href="ch09.html" title="Chapter&nbsp;9.&nbsp;The BRMS (Business Rule Management System)"><link rel="prev" href="ch09s02.html" title="9.2.&nbsp;Administration guide"><link rel="next" href="ch09s04.html" title="9.4.&nbsp;Quick start guide"><base xmlns="http://www.w3.org/TR/xhtml1/transitional" target="body"></base></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div xmlns="" class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">9.3.&nbsp;Architecture</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch09s02.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;9.&nbsp;The BRMS (Business Rule Management System)</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch09s04.html">Next</a></td></tr></table><hr></div><div xmlns="" class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e5238"></a>9.3.&nbsp;Architecture</h2></div></div></div><p>This section covers the innards of the BRMS - it is not necessary to
+  use this if you are integrating or an end user of the BRMS application.
+  However, JBoss Rules is open source, so build instructions form part of the
+  manual.</p><p>You may want to build from source if you want to re-use components, or
+  embed the application in your own.</p><div class="figure"><a name="d0e5245"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="../shared/images/Chapter-BRMS/Architecture.png" align="middle" alt="Architectural diagram"></div></div><p class="title"><b>Figure&nbsp;9.2.&nbsp;Architectural diagram</b></p></div><br class="figure-break"><p>The above diagram shows the major components of the system and how
+  they integrate and are deployed. The Admin guide has more details on the
+  parts that are highly configurable (eg database).</p><p>The BRMS is deployed as a war, which provides user interfaces over the
+  web, and provides binary packages via URLs (or files). It utilized the
+  JSR-170 standard for data storage (JCR). JBoss Seam is used as the component
+  framework, and GWT is used as the widget toolkit for constructing the ajax
+  based web user interface.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e5255"></a>9.3.1.&nbsp;Building from source</h3></div></div></div><p>This section will go over the steps you will need to take to build
+    various components. Mostly this is automated, but the manual process is
+    described for thoroughness.</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e5260"></a>9.3.1.1.&nbsp;Modules</h4></div></div></div><p>There are 2 modules: drools-repository (back end) and drools-jbrms
+      (front end and rules integration). The drools-jbrms module depends on
+      the drools-repository module, as well as other components. The BRMS is
+      part of the main build for all of Drools - when you build Drools - you
+      will also build the BRMS.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e5265"></a>9.3.1.2.&nbsp;Working with Maven 2</h4></div></div></div><p>Maven 2 is used as the build system. To get started, you will need
+      to check out the WHOLE of the source tree for JBoss Rules. This includes
+      the other modules, and the top level lib and repository directories
+      (which are needed by the build). As the BRMS build is part of the main
+      drools build.</p><p>Initially, you should go into the root of the jboss-rules checked
+      out source tree, and run mvn install to install all the components for
+      the inter project dependencies. If the build is broken (no ! say it isn't
+      so !) you can use the flag -Dmaven.test.skip=true to prevent failing
+      unit tests from preventing the build.</p><p>When you want to build the BRMS - you can go into the
+      drools-jbrms directory, and run "mvn package" - this will run the tests,
+      and then build a deployable war. The only thing this won't do is rebuild
+      the GWT front end (see the next section for details on that). Once you
+      have the war file (in the target directory) you should be good to go
+      !</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e5274"></a>9.3.1.3.&nbsp;Working with GWT</h4></div></div></div><p>The GUI widgets for the web front end are developed with GWT
+      (google web toolkit). If you need to make changes to or build the GUI,
+      you will need to download GWT separately. Once GWT is downloaded, you
+      can modify the build.properties file in the drools-jbrms directory to
+      point to where you installed GWT. Once you have this, you can use the
+      ant tasks to build the GWT components, as well as launch GWT in
+      debug/hosted mode should you desire. If you run the build, it will
+      update the webapp directory in the project with the new "compiled"
+      artifacts (GWT does not use JSP, only html and javascript at
+      runtime).</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e5279"></a>9.3.1.4.&nbsp;Debugging, Editing and running with Eclipse</h4></div></div></div><p>Each module has a ready to go and up to date eclipse project
+      configuration, so you can just import them into your eclipse workspace.
+      These projects are generated by maven (mvn eclipse:eclipse to refresh
+      them in case they are wrong or outdated). They have been manually
+      modified to have project dependencies (means you can step through code
+      when debugging).</p><p>Some environment variables are required in eclipse
+      (Window-&gt;Preferences-&gt;Java-&gt;Build path-&gt;Classpath
+      variables): the M2_REPO, as normal, to point to where maven downloads
+      shared dependencies. GWT_HOME should point to where you installed GWT.
+      GWT_DEV must point to the platform specific "dev" jar that ships with
+      the version of GWT you have.</p><p>How you launch from eclipse: you can launch unit tests, as normal
+      (in which case you only need M2_REPO setup - you don't even need to
+      download GWT seperately) - OR, you can launch it in "hosted mode" using
+      the GWT browser, which is great for debugging (from GUI to back end, you
+      can step through code, and make changes on the fly and simply hit
+      refresh). There is a JBRMS.launch file in in the drools-jbrms directory.
+      This should allow Eclipse to launch the JBRMS in debug mode - open the
+      Run dialog (Run-&gt;Run), and then choose "JBRMS" from the list.
+      Launching this will open a new window, with the BRMS in debug mode,
+      ready to go</p><p>Normally</p><p>Downloading and debugging the BRMS with GWT is optional, and if
+      you are only working on non GUI issues, you can skip this step.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e5292"></a>9.3.2.&nbsp;Re-usable components</h3></div></div></div><p>The BRMS uses a service interface to separate the GUI from the "back
+    end" functionality - in this case the back end both includes the asset
+    repository (drools-repository and JCR) as well as the compiler specifics
+    to deal with rules. </p><p>The main interface is RepositoryService, which is implemented in
+    ServiceImplementation. The GWT ajax front end talks to this interface (via
+    the asynchrony callback mechanism that GWT uses). The seam configuration file
+    is components.xml (consult Seam documentation, and the components.xml file
+    for details).</p><p>This service interface may be re-used by alternative components or
+    front ends.</p><p>The GWT user interface may be re-used - as it is GWT there is only
+    one html page: JBRMS.html. For those familiar with GWT, each of the
+    "features" can be used separate (eg in a portal) - look at the
+    JBRMSFeature class and the classes that implement it (they can in theory
+    be stand alone).</p><p>Normally the BRMS is intended to be deployed as its own war, however
+    you could in theory combine it with your own application (with some care)
+    - but it is easier to keep it as a separate war, and will make it easier
+    to upgrade to newer releases as they come out.</p><p>The JBRMS.html file can be customized - for example to change logos or embed
+    the BRMS in another page. Take a look at the JBRMS.html file for details (its 
+    very simple).    
+    </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e5307"></a>9.3.3.&nbsp;Versioning and Storage</h3></div></div></div><p>The Admin guide goes over configuration options in some detail, for
+    database and filesystems.</p><p>Versions of assets are stored in the database along with the data.
+    </p><p>When "snapshots" are created, copies are made of the entire package
+    into a separate location in the JCR database. </p><p>For those familiar with jcr and jackrabbit, you can look at the
+    *.cnd files in the source for the node type definitions. In a nutshell, a
+    package is a "folder" and each asset is a file: an asset can either be
+    textual or have a binary attachment.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e5318"></a>9.3.4.&nbsp;Contributing</h3></div></div></div><p>Consult the wiki and project home-pages if you are interested in
+    contributing. A useful way to contribute is via logging issues or feature
+    requests in JIRA. However, if you are creating an issue in JIRA for the
+    BRMS, it is important that you choose "drools-brms" as the component in
+    the list in JIRA (or else it may get lost !)</p></div></div><div xmlns="" class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch09s02.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch09.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch09s04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">9.2.&nbsp;Administration guide&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="title.html">Home</a>&nbsp;|&nbsp;<a accesskey="t" href="bk01-toc.html">ToC</a></td><td width="40%" align="right" valign="top">&nbsp;9.4.&nbsp;Quick start guide</td></tr></table></div></body></html>

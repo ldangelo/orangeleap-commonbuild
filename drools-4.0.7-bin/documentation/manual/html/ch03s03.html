@@ -1,0 +1,76 @@
+<html xmlns="http://www.w3.org/TR/xhtml1/transitional"><head xmlns="">
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>3.3.&nbsp;Source Checkout</title><link rel="stylesheet" href="../shared/css/html.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_6797"><link rel="start" href="title.html" title="Drools"><link rel="up" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Installation and Setup (Core and IDE)"><link rel="prev" href="ch03s02.html" title="3.2.&nbsp;Setup from source"><link rel="next" href="ch03s04.html" title="3.4.&nbsp;Build"><base xmlns="http://www.w3.org/TR/xhtml1/transitional" target="body"></base></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div xmlns="" class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.3.&nbsp;Source Checkout</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;3.&nbsp;Installation and Setup (Core and IDE)</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03s04.html">Next</a></td></tr></table><hr></div><div xmlns="" class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1568"></a>3.3.&nbsp;Source Checkout</h2></div></div></div><p>Drools is available from two <a class="indexterm" name="d0e1573"></a>Subversion repositories.</p><div class="itemizedlist"><ul type="disc"><li><p>Anonymous SVN</p><p>http://anonsvn.labs.jboss.com/labs/jbossrules/trunk/</p></li><li><p>Developers secured SVN</p><p>https://svn.labs.jboss.com/labs/jbossrules/trunk/</p></li></ul></div>
+
+To checkout drools source code just execute the following command.
+
+<pre class="programlisting">fmeyer:~/jboss $ svn checkout http://anonsvn.labs.jboss.com/labs/jbossrules/trunk/ jbossrules</pre>
+
+And wait to complete the files download.
+
+<pre class="programlisting">A    jbossrules/drools-repository
+A    jbossrules/drools-repository/.classpath
+A    jbossrules/drools-repository/.project
+A    jbossrules/drools-repository/doc
+A    jbossrules/drools-repository/doc/repository_layout.jpeg
+A    jbossrules/drools-repository/doc/high_level_design.jpeg
+A    jbossrules/drools-repository/doc/javadoc
+A    jbossrules/drools-repository/doc/javadoc/serialized-form.html
+A    jbossrules/drools-repository/doc/javadoc/index-all.html
+A    jbossrules/drools-repository/doc/javadoc/stylesheet.css
+A    jbossrules/drools-repository/doc/javadoc/allclasses-frame.html
+A    jbossrules/drools-repository/doc/javadoc/package-list
+A    jbossrules/drools-repository/doc/javadoc/overview-tree.html
+A    jbossrules/drools-repository/doc/javadoc/org
+A    jbossrules/drools-repository/doc/javadoc/org/drools
+A    jbossrules/drools-repository/doc/javadoc/org/drools/repository
+A    jbossrules/drools-repository/doc/javadoc/org/drools/repository/class-use
+A    jbossrules/drools-repository/doc/javadoc/org/drools/repository/class-use/RuleSet.html
+A    jbossrules/drools-repository/doc/javadoc/org/drools/repository/class-use/RulesRepositoryException.html
+A    jbossrules/drools-repository/doc/javadoc/org/drools/repository/class-use/RulesRepository.html
+A    jbossrules/drools-repository/doc/javadoc/org/drools/repository/RuleSet.html
+
+....
+
+snip 
+
+....
+
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/benchmark/waltz
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/benchmark/waltz/waltz.drl
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/benchmark/manners
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/benchmark/manners/manners.drl
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/benchmark/waltzdb
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/benchmark/waltzdb/waltzdb.drl
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/TroubleTicketWithDSL.drl
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/TroubleTicket.drl
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/conway
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/conway/calculate.rfm
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/conway/generation.rf
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/conway/calculate.rf
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/conway/registerNeighbor.rfm
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/conway/killAll.rfm
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/conway/registerNeighbor.rf
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/conway/conway-agendagroup.drl
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/conway/killAll.rf
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/conway/conway-ruleflow.drl
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/conway/generation.rfm
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/ticketing.dsl
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/StateExampleUsingSalience.drl
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/golf.drl
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/LogicalAssertionsNotPingPong.drl
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/StateExampleDynamicRule.drl
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/sudoku
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/sudoku/sudoku.drl
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/HelloWorld.drl
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/ExamplePolicyPricing.xls
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/HonestPolitician.drl
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/Fibonacci.drl
+A    jbossrules/drools-examples/drools-examples-drl/src/main/rules/org/drools/examples/StateExampleUsingAgendGroup.drl
+A    jbossrules/drools-examples/drools-examples-drl/pom.xml
+A    jbossrules/drools-examples/drools-examples-drl/build.xml
+ U   jbossrules
+Checked out revision 13656.</pre><p>Although, we highly recommend command line tools to work with repository you can also use both eclipse's integrated SVN client or TortoiseSVN</p><p>Setup TortoiseSVN to checkout from the subversion repository and click
+  <code class="literal">'OK'</code> Once the checkout has finished you should see the
+  folders as shown below.</p><div class="screenshot"><div class="mediaobject"><img src="../shared/images/Chapter-Install/svn_checkout1.jpg"></div></div><div class="screenshot"><div class="mediaobject"><img src="../shared/images/Chapter-Install/svn_checkout2.jpg"></div></div><div class="screenshot"><div class="mediaobject"><img src="../shared/images/Chapter-Install/svn_checkout3.jpg"></div></div></div><div xmlns="" class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch03s04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.2.&nbsp;Setup from source&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="title.html">Home</a>&nbsp;|&nbsp;<a accesskey="t" href="bk01-toc.html">ToC</a></td><td width="40%" align="right" valign="top">&nbsp;3.4.&nbsp;Build</td></tr></table></div></body></html>

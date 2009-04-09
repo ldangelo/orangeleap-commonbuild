@@ -1,0 +1,213 @@
+<html xmlns="http://www.w3.org/TR/xhtml1/transitional"><head xmlns="">
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>9.2.&nbsp;Administration guide</title><link rel="stylesheet" href="../shared/css/html.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_6797"><link rel="start" href="title.html" title="Drools"><link rel="up" href="ch09.html" title="Chapter&nbsp;9.&nbsp;The BRMS (Business Rule Management System)"><link rel="prev" href="ch09.html" title="Chapter&nbsp;9.&nbsp;The BRMS (Business Rule Management System)"><link rel="next" href="ch09s03.html" title="9.3.&nbsp;Architecture"><base xmlns="http://www.w3.org/TR/xhtml1/transitional" target="body"></base></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div xmlns="" class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">9.2.&nbsp;Administration guide</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch09.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;9.&nbsp;The BRMS (Business Rule Management System)</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch09s03.html">Next</a></td></tr></table><hr></div><div xmlns="" class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e5070"></a>9.2.&nbsp;Administration guide</h2></div></div></div><p>This chapter covers installation and administration issues of the
+  BRMS.</p><p>The BRMS is a web application that can run in multiple environments,
+  and be configured to suit most situations. There is also some initial setup
+  of data, and export/import functions covered.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e5077"></a>9.2.1.&nbsp;Installation</h3></div></div></div><p>Installation for most people is very simple. The BRMS application is
+    deployed as a .war file, which can be deployed in application servers or
+    servlet containers with little or no configuration if you are happy with
+    the defaults.</p><p>When you have downloaded the BRMS distribution (which you can get
+    from http://labs.jboss.com/jbossrules/downloads), you will find the
+    drools-jbrms.war file in the zip file. Copy the WAR file into the
+    deployment directory of you app server, and then start your app server. If
+    you need to customize some settings, you can first "explode" (unzip) the
+    war file, and change any configuration settings, and then either zip it
+    up, or deploy it "exploded".</p><p>Once the drools-jbrms.war has been placed in the deployment
+    directory, and the application server started, you should navigate to
+    http://localhost/drools-jbrms and check that the BRMS appears. (Obviously
+    substitute the URL for what your application server is configured
+    to).</p><p>Once that shows up, you are deployed and ready to go !</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e5088"></a>9.2.1.1.&nbsp;Supported and recommended platforms</h4></div></div></div><p>The BRMS is capable of running in any application server that
+      supports Java SE5 (JEE 5 is not required) - this includes servlet
+      containers like tomcat.</p><p>It is actively tested on JBoss platforms, and these are
+      recommended if you are able to use them, or don't have any existing
+      infrastructure. However, it is possible to use any container/app server,
+      in some cases with minor configuration tweaks (consult the wiki for
+      specific tips).</p><p>The following are a list of recommended platforms (all freely
+      available), in all cases, you can substitute newer versions of the same
+      and it should work (as time may have passed since this was
+      written):</p><div class="itemizedlist"><ul type="disc"><li><p>JBoss Application Server 4.0.5</p><p>This is recommended as a general application server solution,
+          if you need to run other applications alongside the BRMS.</p></li><li><p>JBoss Web 1.0.1</p><p>This is an ideal solution if you need a "lighter" server to
+          run just the BRMS (perhaps stand alone).</p></li></ul></div><p>You can of course download these from www.jboss.com for every
+      operating system.</p><p>Deployment into JBoss platforms: If you are installing a new JBoss
+      platform, the WAR can be copied to [app server
+      directory]/server/default/deploy. You then start up the server by
+      running run.sh or run.bat in the [app server directory/bin]
+      directory.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e5112"></a>9.2.2.&nbsp;Database configuration</h3></div></div></div><p>The BRMS uses the JCR standard for storing assets (such as rules).
+    The default implementation is Apache Jackrabbit
+    (http://jackrabbit.apache.org/). This includes an out of the box storage
+    engine/database, which you can use as is, or configure to use an existing
+    RDBMS if needed.</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e5117"></a>9.2.2.1.&nbsp;Changing the location of the data store</h4></div></div></div><p>When you run the BRMS for the first time (starting up the app
+      server), it will create a database in the [app server directory]/bin/
+      directory (assuming you used on of the JBoss platforms). There is a
+      repository.xml file, and a repository directory that are automatically
+      created.</p><p>The location of the data store should be a secure location, that
+      is backed up. The default location may not be suitable for this, so the
+      easiest way is to set a more suitable location. If you want to change
+      this, please make sure you have stopped the BRMS (ie stopped the app
+      server or undeployed the application).</p><p>To change the location, unzip the WAR file, and locate the
+      components.xml file in the WEB-INF directory. This is a JBoss Seam
+      configuration file (Seam is the framework used) which allows various
+      parts of the system to be customized. When you have located the
+      components.xml file, you should see something like the following:</p><pre class="programlisting">&lt;component name="repositoryConfiguration"&gt;
+ &lt;!--
+  *** This is for configuring the "home" directory for the repository storage. the directory must exist. ***
+     &lt;property name="homeDirectory"&gt;/home/michael/RulesRepository_001&lt;/property&gt;
+   --&gt;  
+
+   ...
+&lt;/component&gt;
+</pre><p>Find the component with a name of "repositoryConfiguration" and
+      the property with the name of "homeDirectory".</p><p>If you un comment this (as in the example above it is commented
+      out), you can set whatever path you need for the repository data to be
+      stored in. You can also use this to move the repository around. In that
+      case, when you have set the location in the components.xml you can
+      simply move the repository.xml AND the repository directory to the new
+      location that you set in the components.xml.</p><p>If there is no repository at the location specified (or in the
+      default location) then the BRMS will create a new empty one.</p><p>There are many more options which can be configured in the
+      repository.xml, but for the most part, it is not recommended to change
+      the defaults.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e5136"></a>9.2.2.2.&nbsp;Configuring the BRMS to use an external RDBMS</h4></div></div></div><p>In some cases it may be a requirement that you use an external
+      RDBMS, such as Oracle, MySQL, or Microsoft SQL Server as the data store
+      - this is permitted. In this case, the easiest thing to do is to start
+      up the RDBMS with defaults (or with a suitable home directory as
+      specified above) to let it generate the default repository.xml
+      scaffolding.</p><p>Locate the repository.xml file that was generated, and open it -
+      it will be annotated with comments describing many of the different
+      options. From here on, you will need to know a little about Jackrabbit
+      Persistence managers:
+      http://jackrabbit.apache.org/doc/config.html</p><p>There are a few persistence managers, some are database specific
+      (eg Oracle). There is a SimpleDBPersistenceManager which works with any
+      database that supports JDBC - you also specify the database type, so it
+      uses the specific DDL to create the table structure (all major databases
+      are supported).</p><p>The BRMS will create the tables the first time it is started up if
+      it is running against a fresh (empty) RDBMS - so its important to note
+      that the user credentials supplied have permissions to create tables (at
+      least initially, on first run, after that they could be locked
+      down).</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e5147"></a>9.2.2.3.&nbsp;Searching and indexing, Version storage</h4></div></div></div><p>Jackrabbit has a separate storage area for version storage (as
+      over time, the number of old versions will increase, yet it should not
+      slow down the performance of the main data store). The version storage
+      also has its own persistence manage configuration in the repository.xml,
+      but for most purposes you can use the same database as the main storage
+      (just with a different schema object prefix - ie in your database, all
+      the version data will be prefixed with "version_" but otherwise in the
+      same tablespace). See the repository.xml for more details of
+      this.</p><p>Lucene is used to provide indexing across the semi structured
+      data, and across versions. This indexing is generally best stored on a
+      filesystem, local to the BRMS (as per the default in the repository.xml)
+      - in most cases the default is fine.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e5154"></a>9.2.3.&nbsp;Security</h3></div></div></div><p>Please note that giving someone access to the BRMS indicates a level of trust.
+    Being able to editing and build rules is providing a great deal of power to a user. Thus you should not open up the BRMS to your entire organisation - but instead to a select few. Use https (http with TLS/SSL) whereever possible (even internally in a companies network this is a good idea). Use this power wisely - this not a "run of the mill" application that provides read/write access to a database, but something much more power. Just imagine you are spider man - with great power comes great responsibility (of course even more so for super man).</p><p>Security is configured by using the components.xml file in the war
+    file. To customize this, you will need to unzip the war file, and locate
+    the components.xml file which is in the WEB-INF directory.</p><p>The JAAS standard is used as the underlying authentication and
+    authorization mechanism, the upshot of which means its very flexable and
+    able to integrate into most existing environments.</p><p>Out of the box, the BRMS shows a login screen, but no security
+    credentials are enforced - the user name is used, but no password check is
+    performed. To enforce authentication, you need to configure it to use an
+    appropriate user directory (you may have Active Directory or similar
+    already).</p><p>In the components.xml file, you should located a security
+    configuration section like the following:</p><pre class="programlisting">&lt;!-- SECURITY CONFIGURATION --&gt;
+    
+&lt;!-- default (will take any username, useful if you want to keep track of users but not authenticate --&gt;
+&lt;security:identity authenticate-method="#{defaultAuthenticator.authenticate}"/&gt;
+
+&lt;!-- NO authentication. This will bypass the login screen when you hit the app. Everyone is "guest" --&gt;
+&lt;!-- &lt;security:identity authenticate-method="#{nilAuthenticator.authenticate}"/&gt; --&gt;   </pre><p>As you can see from above, the 2 "out of the box" options are pass
+    through - which means any user is allowed in, or bypassed, in which case
+    there is no login screen (eg you may be securing access to the app via a
+    web server anyway).</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e5171"></a>9.2.3.1.&nbsp;Using your containers security and LDAP</h4></div></div></div><p>Every application server supports advanced configurations which
+      can work with your existing security infrastructure. The case of JBoss
+      AS will be shown here as an example.</p><pre class="programlisting">&lt;security:identity authenticate-method="#{authenticator.authenticate}" 
+                      jaas-config-name="other"/&gt;</pre><p>This will use the "other" jaas config in JBoss AS. If you look in
+      [jboss install dir]/server/default/conf you will see a login-config.xml
+      file. This file contains various configs. If you use "other" like the
+      one above, then it will look for users.properties and roles.properties
+      in the conf directory for usernames and passwords to authenticate
+      against (this is fine for a fixed small number of users).</p><p>LDAP is perhaps the most popular choice for larger enterprises, so
+      following is an example that works with Active Directory. You can get
+      much more information on how to configure JBoss AS for all scenarios
+      with LDAP from http://wiki.jboss.org/wiki/Wiki.jsp?page=LdapLoginModule
+      and http://wiki.jboss.org/wiki/Wiki.jsp?page=LdapExtLoginModule.</p><pre class="programlisting">&lt;application-policy name="brms"&gt;
+    &lt;authentication&gt;
+        &lt;login-module code="org.jboss.security.auth.spi.LdapExtLoginModule" flag="required" &gt;
+            &lt;!--
+                Some AD configurations may require searching against
+                the Global Catalog on port 3268 instead of the usual
+                port 389.  This is most likely when the AD forest
+                includes multiple domains.
+            --&gt;
+            &lt;module-option name="java.naming.provider.url"&gt;ldap://ldap.jboss.org:389&lt;/module-option&gt;
+            &lt;module-option name="bindDN"&gt;JBOSS\someadmin&lt;/module-option&gt;
+            &lt;module-option name="bindCredential"&gt;password&lt;/module-option&gt;
+            &lt;module-option name="baseCtxDN"&gt;cn=Users,dc=jboss,dc=org&lt;/module-option&gt;
+            &lt;module-option name="baseFilter"&gt;(sAMAccountName={0})&lt;/module-option&gt;
+
+            &lt;module-option name="rolesCtxDN"&gt;cn=Users,dc=jboss,dc=org&lt;/module-option&gt;
+            &lt;module-option name="roleFilter"&gt;(sAMAccountName={0})&lt;/module-option&gt;
+            &lt;module-option name="roleAttributeID"&gt;memberOf&lt;/module-option&gt;
+            &lt;module-option name="roleAttributeIsDN"&gt;true&lt;/module-option&gt;
+            &lt;module-option name="roleNameAttributeID"&gt;cn&lt;/module-option&gt;
+
+            &lt;module-option name="roleRecursion"&gt;-1&lt;/module-option&gt;
+            &lt;module-option name="searchScope"&gt;ONELEVEL_SCOPE&lt;/module-option&gt;
+        &lt;/login-module&gt;
+    &lt;/authentication&gt;
+&lt;/application-policy&gt;</pre><p>To use the above, you would put jaas-config-name="brms" in the
+      security:identity tag in the components.xml for the BRMS.</p><p>Similar configuration examples can be found for other directory
+      services.</p><p>LDAP isn't the final word, you can use JDBC against a database of
+      user name, or you can write your own login module to use any sort of
+      weird and wonderful authentication and authorization systems that you
+      may have to deal with (that would be an extreme case, but its possible).
+      Refer to JBoss AS documentation (or documentation for your existing
+      application server).</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e5190"></a>9.2.4.&nbsp;Data management</h3></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e5193"></a>9.2.4.1.&nbsp;Backups</h4></div></div></div><p>How backups are performed is dependent on what persistence manager
+      scheme you are using. Using the default one - then its a matter of
+      backing up the repository directory (wherever you have it configured to
+      be). Restoring it is simply a matter of copying across the repository
+      directory.</p><p>Ideally you will either stop the BRMS application while a file
+      backup is being done, or ensure that no one is using it.</p><p>In the case of using an external database (eg Oracle, MySQL), then
+      the normal scheme can apply that you would use to backup those database
+      (you do back them up, right?). In this case, when restoring, it is also
+      a good idea to clear the indexes (delete the directory where the indexes
+      are) so they are created fresh from the data (and thus guaranteed to be
+      in sync).</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e5202"></a>9.2.4.2.&nbsp;Asset list customization</h4></div></div></div><p>In a few places in the BRMS there is an asset list: this list can
+      be customized by looking for the AssetListTable.properties file. You can
+      then set the header names and the "getter" methods that are used to
+      populate the columns. eg you could add in getCreator, or
+      getExternalSource as extra fields if you were using them.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e5207"></a>9.2.4.3.&nbsp;Customised selectors for package building</h4></div></div></div><p>When building packages (from the "Packages" feature) you have the option to specify the name of a "selector". This selector will filter the list of rules that are built into the package. What you enter in the selector text box, is the name of a selector as configured on the server.</p><p>
+	To configure a selector, you will need to "explode" the war file for the BRMS, and locate the selectors.properties file (note you can also put your own selectors.properties file in the system classpath if you like). 
+	In this file, you will find details on how you can configure a custom selector. The options are to use a drl file, or the name of a class that you have written (and which is available on the classpath). Classes must implement the AssetSelector interface. DRL files can also be used (there is an example one in the selectors.properties file). Each selector you configure has a unique name in this properties file - and this is the name that you can use when building packages. 
+      </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e5214"></a>9.2.4.4.&nbsp;Adding your own logos or styles to the BRMS web GUI</h4></div></div></div><p>Everyone loves having their own logo on screen - this is to ensure
+      that the people using the application don't forget who they work for or
+      what product they are using for more then a nanosecond (the consequences
+      of them forgetting are too terrible con contemplate).</p><p>To achieve, this, you can "explode" the deployment war file, and
+      locate the JBRMS.html file.</p><pre class="programlisting">
+&lt;html&gt;
+&lt;head&gt;
+  &lt;meta name='gwt:module' content='org.drools.brms.JBRMS'&gt;
+  &lt;link rel='stylesheet' href='JBRMS.css'&gt;
+  &lt;title&gt;JBoss Business Rules Management System&lt;/title&gt;
+     &lt;link rel="shortcut icon" href="images/drools.gif" type="image/gif"&gt;
+     &lt;link rel="icon" href="images/drools.gif" type="image/gif"&gt;
+ &lt;/head&gt;
+ &lt;body&gt;
+     &lt;div class="headerBarblue"&gt;&lt;img src="images/jbossrules_hdrlogo.png" width="279" height="70" /&gt;&lt;/d
+ &lt;!-- This script is the bootstrap stuff that simply must be there; it is sent down uncompressed --&gt; 
+  &lt;script language='javascript' src='gwt.js'&gt;&lt;/script&gt;
+  &lt;iframe id='__gwt_historyFrame' style='width:0;height:0;border:0'&gt;&lt;/iframe&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><p> The above is the contents of the JBRMS.html
+      file - it is fairly empty (as most of the work is done by the GWT - the
+      GUI is built dynamically in the browser). The parts you can customise
+      are the style sheet - you can either edit the JBRMS.css (or better yet,
+      take a copy, and change the style to be what you need), the "shortcut
+      icon" (its what shows in the address bar in the browser etc - also
+      change the "icon" link to be the same so it works in IE), and the header
+      logo. The rest should be left as is, to allow the GWT components to be
+      loaded and attached to the page. This html page is loaded only once by
+      the browser when the user accesses the BRMS web GUI.</p><p>The best way to customize is to take a copy of the JBRMS.html -
+      and then edit. You can also change the URL by editing the web.xml via
+      the normal means. </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e5227"></a>9.2.4.5.&nbsp;Import and Export</h4></div></div></div><p>A JCR standard export/import feature is available from the Admin
+      part of the web interface.</p><p>This will export the entire repository to an XML format as defined
+      by the JCR standard.</p><p>In the case of import, it will clear any existing content in the
+      database.</p><p>This is not a substitute for backup but can be useful when
+      migrating. It is important to note that version history is not exported
+      this way, only the current state. Hence it is still recommended that a
+      formal backup regime be used at all times on the repository database
+      itself.</p></div></div></div><div xmlns="" class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch09.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch09.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch09s03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;9.&nbsp;The BRMS (Business Rule Management System)&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="title.html">Home</a>&nbsp;|&nbsp;<a accesskey="t" href="bk01-toc.html">ToC</a></td><td width="40%" align="right" valign="top">&nbsp;9.3.&nbsp;Architecture</td></tr></table></div></body></html>

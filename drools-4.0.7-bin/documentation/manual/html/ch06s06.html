@@ -1,0 +1,29 @@
+<html xmlns="http://www.w3.org/TR/xhtml1/transitional"><head xmlns="">
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>6.6.&nbsp;Query</title><link rel="stylesheet" href="../shared/css/html.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_6797"><link rel="start" href="title.html" title="Drools"><link rel="up" href="ch06.html" title="Chapter&nbsp;6.&nbsp;The Rule Language"><link rel="prev" href="ch06s05.html" title="6.5.&nbsp;Rule"><link rel="next" href="ch06s07.html" title="6.7.&nbsp;Domain Specific Languages"><base xmlns="http://www.w3.org/TR/xhtml1/transitional" target="body"></base></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div xmlns="" class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">6.6.&nbsp;Query</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch06s05.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;6.&nbsp;The Rule Language</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch06s07.html">Next</a></td></tr></table><hr></div><div xmlns="" class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e4204"></a>6.6.&nbsp;Query</h2></div></div></div><div class="figure"><a name="d0e4207"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="../shared/images/Chapter-Rule_Language/query.png" align="middle" alt="query"></div></div><p class="title"><b>Figure&nbsp;6.42.&nbsp;query</b></p></div><br class="figure-break"><p>A query contains the structure of the LHS of a rule only (you don't
+  specify "when" or "then"). It is simply a way to query the working memory
+  for facts that match the conditions stated. A query has an optional set of
+  parameters, that can also be optionally typed, if type is not given then
+  Object type is assumed and the engine will attempt to co-erce the values as
+  needed.</p><p>To return the results use WorkingMemory.getQueryResults("name") -
+  where "name" is query name. Query names are global to the RuleBase, so do
+  not add queries of the same name to different packages for the same Rule
+  Base. This contains a list of query results, which allow you to to get to
+  the objects that matched the query.</p><p>This example creates a simple query for all the people over the age of
+  30</p><div class="example"><a name="d0e4221"></a><p class="title"><b>Example&nbsp;6.45.&nbsp;Query People over the age of 30</b></p><div class="example-contents"><pre class="programlisting">query "people over the age of 30" 
+    person : Person( age &gt; 30 )
+end</pre></div></div><br class="example-break"><div class="example"><a name="d0e4226"></a><p class="title"><b>Example&nbsp;6.46.&nbsp;Query People over the age of X, and who live in y</b></p><div class="example-contents"><pre class="programlisting">query "people over the age of X"  (int x, String y)
+    person : Person( age &gt; x, location == y )
+end</pre></div></div><br class="example-break"><p>We iterate over the returned QueryResults using a standard 'for' loop.
+  Each row returns a QueryResult which we can use to access each of the
+  columns in the Tuple. Those columns can be access by bound declaration name
+  or index position.</p><div class="example"><a name="d0e4233"></a><p class="title"><b>Example&nbsp;6.47.&nbsp;Query People over the age of 30</b></p><div class="example-contents"><pre class="programlisting">QueryResults results = workingMemory.getQueryResults( "people over the age of 30" );
+System.out.println( "we have " + results.size() + " people over the age  of 30" );
+
+System.out.println( "These people are are over 30:" );
+
+for ( Iterator it = results.iterator; it.hasNext(); ) {
+    QueryResult result = ( QueryResult ) it.next();
+    Person person = ( Person ) result.get( "person" );
+    System.out.println( person.getName() + "\n" );
+}</pre></div></div><br class="example-break"></div><div xmlns="" class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch06s05.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch06.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch06s07.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">6.5.&nbsp;Rule&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="title.html">Home</a>&nbsp;|&nbsp;<a accesskey="t" href="bk01-toc.html">ToC</a></td><td width="40%" align="right" valign="top">&nbsp;6.7.&nbsp;Domain Specific Languages</td></tr></table></div></body></html>
