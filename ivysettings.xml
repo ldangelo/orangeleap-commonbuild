@@ -19,6 +19,7 @@
 		<ibiblio name="internalSnapshots" m2compatible="true" usepoms="false" root="http://mpx-build.mpowersystems.com:8081/nexus/content/groups/public-snapshots" pattern="[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
 		<ibiblio name="internalPublic" m2compatible="true" usepoms="false" root="http://mpx-build.mpowersystems.com:8081/nexus/content/groups/public" pattern="[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
 		<ibiblio name="public" m2compatible="true" usepoms="false" root="http://repo1.maven.org/maven2" pattern="[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]" />
+		<ibiblio name="ibiblio" m2compatible="true" usepoms="false" root="http://mirrors.ibiblio.org/pub/mirrors/maven2" pattern="[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
 		<ibiblio name="jboss" m2compatible="true" usepoms="false" root="http://repository.jboss.org/maven2" pattern="[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
 		<ibiblio name="servicemax" m2compatible="true" usepoms="false" root="http://svn.apache.org/repos/asf/servicemix/m2-repo" pattern="[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
 		<chain name="main" dual="true">
@@ -26,6 +27,7 @@
 			<resolver ref="internalSnapshots"/>
 			<resolver ref="internalPublic"/>
 			<resolver ref="public"/>
+			<resolver ref="ibiblio"/>
 			<resolver ref="jboss"/>
 			<resolver ref="servicemax"/>
 		</chain>
