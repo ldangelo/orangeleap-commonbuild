@@ -38,8 +38,8 @@
           target: resolve              
          ================================= -->
     <target name="resolve" depends="load-ivy" description="-> resolve and retrieve dependencies with ivy">
-    	<ivy:resolve file="${ivy.file}"/>
-    	<ivy:retrieve />
+    	<ivy:resolve file="${ivy.file}" log="download-only"/>
+    	<ivy:retrieve log="quiet" />
 
     	<ivy:cachepath pathid="compile.path" conf="compile" />
     	<pathconvert property="compile.lib" refid="compile.path"></pathconvert> 
