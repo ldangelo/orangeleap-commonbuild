@@ -9,21 +9,21 @@
 	<import file="${commonBuild.dir}/ivyBuild.xml"/>
 	
 	<target name="buildlist" depends="load-ivy">
-		<ivy:buildlist reference="build-path">
+		<ivy:buildlist reference="build-path" haltonerror="false" onMissingDescriptor="warn">
 			<fileset dir=".." includes="**/build/build.xml" excludes="${ant.project.name}/build.xml"/>
 		</ivy:buildlist>
 	</target>
 
 	<target name="build" depends="buildlist" description="Invokes the 'build' target on each build file in the project tree">
-		<subant target="build" buildpathref="build-path" />
+		<subant target="build" buildpathref="build-path" failonerror="false" />
 	</target>
 	
 	<target name="publish" depends="buildlist" description="compile, jar and publish all projects in the right order to the SHARED repository">
-		<subant target="publish" buildpathref="build-path" />
+		<subant target="publish" buildpathref="build-path" failonerror="false" />
 	</target>
 	
 	<target name="publish-local" depends="buildlist" description="compile, jar and publish all projects in the right order to the LOCAL repository">
-		<subant target="publish-local" buildpathref="build-path" />
+		<subant target="publish-local" buildpathref="build-path" failonerror="false" />
 	</target>
 	
 	<target name="clean-all" depends="buildlist" description="clean all projects">
