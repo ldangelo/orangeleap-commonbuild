@@ -4,7 +4,7 @@
 
 	<property file="${commonBuild.dir}/commonBuild.properties" />
 
-	<property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar" />
+	<property name="ivy.jar.file" value="${ivy.jar.dir}/ivy-${ivy.install.version}.jar" />
 
 	<!-- setup ivy default configuration with some custom info -->
 	<property name="ivy.local.default.root" value="${repository.dir}/local"/>

@@ -4,13 +4,13 @@
 	Build ALL projects in your source tree
     ================================= -->
 
-<project name="commonBuild" xmlns:ivy="antlib:org.apache.ivy.ant" basedir="." default="publish-local">
+<project name="commonBuild" xmlns:ivy="antlib:org.apache.ivy.ant" basedir="." default="build">
 	<property file="${basedir}/commonBuild.properties" />
 	<import file="${commonBuild.dir}/ivyBuild.xml"/>
 	
 	<target name="buildlist" depends="load-ivy">
 		<ivy:buildlist reference="build-path" haltonerror="false" onMissingDescriptor="warn">
-			<fileset dir=".." includes="**/build/build.xml" excludes="${ant.project.name}/build.xml"/>
+			<fileset dir="${root.projects.dir}" includes="**/build/build.xml" excludes="${ant.project.name}/build.xml"/>
 		</ivy:buildlist>
 	</target>
 
