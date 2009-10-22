@@ -10,12 +10,12 @@
 	
 	<target name="buildlist" depends="load-ivy">
 		<ivy:buildlist reference="build-path" haltonerror="false" onMissingDescriptor="warn">
-			<!--<fileset dir="${root.projects.dir}/${build.prefix}orangeleap-common-security" includes="build/build.xml"/>-->
-			<fileset dir="${root.projects.dir}/${build.prefix}JasperServer-3.5" includes="build/build.xml"/>
-			<fileset dir="${root.projects.dir}/${build.prefix}tang" includes="build/build.xml"/>
-			<fileset dir="${root.projects.dir}/${build.prefix}Clementine" includes="build/build.xml"/>
-			<fileset dir="${root.projects.dir}/${build.prefix}tangerine" includes="build/build.xml"/>
-			<fileset dir="${root.projects.dir}/${build.prefix}orangeleap-customization" includes="build/build.xml"/>
+			<fileset dir="${root.projects.dir}" includes="${build.prefix}orangeleap-common-security/build/build.xml"/>
+			<fileset dir="${root.projects.dir}" includes="${build.prefix}jasperserver-3.5/build/build.xml"/>
+			<fileset dir="${root.projects.dir}" includes="${build.prefix}tang/build/build.xml"/>
+			<fileset dir="${root.projects.dir}" includes="${build.prefix}clementine/build/build.xml"/>
+			<fileset dir="${root.projects.dir}" includes="${build.prefix}tangerine/build/build.xml"/>
+			<fileset dir="${root.projects.dir}" includes="${build.prefix}orangeleap-customization/build/build.xml"/>
 		</ivy:buildlist>
 	</target>
 
